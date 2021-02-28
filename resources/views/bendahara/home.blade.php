@@ -6,9 +6,21 @@
 @endsection
 @section('section-body')
 <div class="row">
-    <div class="col-12 col-md-6 col-lg-6">
+    <div class="col-md-8">
         <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
     </div>
+    <div class="col-md-4">
+      <form action="{{route('searchbendahara')}}">
+        
+        <div class="from-group">
+          <input type="text" class="form-control typeahead" autocomplete="off" name="ket" id="ket" placeholder="Search..">
+          <div class="dropdown" id="ketlist">
+            
+          </div>
+        </div>
+        {{ csrf_field() }}
+      </form>
+  </div>
     <table class="table table-striped">
         <tr>
           <th>No</th>
@@ -40,6 +52,7 @@
                     @method('delete')
                   </form>
                 </a>
+                <a href="{{route('detailbendahara',$data->id)}}" class="btn btn-primary"><i class="fa fa-play"></i>Detail</a>
               </td>
           </tr>
           @php
@@ -198,5 +211,32 @@ $(".btn-edit").on('click',function(){
 //   })
 // });
 </script>
+<script>
+  $(document).ready(function(){
+  
+   $('#ket').keyup(function(){ 
+          var query = $(this).val();
+          if(query != '')
+          {
+           var _token = $('input[name="_token"]').val();
+           $.ajax({
+            url:"{{ route('bendahara.fetch') }}",
+            method:"POST",
+            data:{query:query, _token:_token},
+            success:function(data){
+             $('#ketlist').fadeIn();  
+                      $('#ketlist').html(data);
+            }
+           });
+          }
+      });
+  
+      $(document).on('click', 'li', function(){  
+          $('#ket').val($(this).text());  
+          $('#ketlist').fadeOut();  
+      });  
+  
+  });
+  </script>
 
 @endpush

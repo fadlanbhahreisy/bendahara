@@ -6,10 +6,22 @@
 @endsection
 @section('section-body')
     <div class="row">
-    <div class="col-12 col-md-6 col-lg-6">
+    <div class="col-md-8">
         <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
     </div>
-    <table class="table table-striped">
+    <div class="col-md-4">
+        <form action="{{route('searchkoordinator')}}">
+          
+          <div class="from-group">
+            <input type="text" class="form-control typeahead" autocomplete="off" name="ket" id="ket" placeholder="Search..">
+            <div class="dropdown" id="ketlist">
+              
+            </div>
+          </div>
+          {{ csrf_field() }}
+        </form>
+    </div>
+    <table class="table table-striped mt-5">
         <tr>
           <th>No</th>
           <th>Keterangan</th>
@@ -40,6 +52,7 @@
                     @method('delete')
                   </form>
                 </a>
+                <a href="{{route('detailkoordinator',$data->id)}}" class="btn btn-primary"><i class="fa fa-play"></i>Detail</a>
               </td>
           </tr>
           @php
@@ -112,14 +125,14 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="" id="form-edit" enctype="multipart/form-data">
+        <form action="{{route('updatekoordinator')}}" method="POST" id="form-edit" enctype="multipart/form-data">
           @csrf
           <div class="modal-body">
             
           </div>
         <div class="modal-footer">
           <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary btn-update">Save changes</button>
+          <button type="submit" class="btn btn-primary btn-update">Save changes</button>
         </div>
       </form>
       </div>
@@ -151,6 +164,60 @@ $(".swal-confirm").click(function(e) {
       }
     });
 });  
+$(".btn-edit").on('click',function(){
+  //console.log($(this).data('id'))
+  var id = $(this).data('id')
+  $.ajax({
+    url:"/koordinator/edit/"+id,
+    method:"GET",
+    success: function(data){
+      //console.log(data)
+      $('#editmodal').modal('show')
+      $('#editmodal').find('.modal-body').html(data)
+    },
+    error: function(error){
+      console.log(error)
+    }
+  })
+});
 </script>
+{{-- <script type="text/javascript">
+  var path={{route('autocomplete')}};
+  $('input.typeahead').typeahead({
+    source:function(terms,process){
+      return $.get(path,{terms:terms},function(data){
+        return process(data);
+      })
+    }
+  });
+
+</script> --}}
+<script>
+  $(document).ready(function(){
+  
+   $('#ket').keyup(function(){ 
+          var query = $(this).val();
+          if(query != '')
+          {
+           var _token = $('input[name="_token"]').val();
+           $.ajax({
+            url:"{{ route('autocomplete.fetch') }}",
+            method:"POST",
+            data:{query:query, _token:_token},
+            success:function(data){
+             $('#ketlist').fadeIn();  
+                      $('#ketlist').html(data);
+            }
+           });
+          }
+      });
+  
+      $(document).on('click', 'li', function(){  
+          $('#ket').val($(this).text());  
+          $('#ketlist').fadeOut();  
+      });  
+  
+  });
+  </script>
 
 @endpush

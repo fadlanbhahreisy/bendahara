@@ -120,4 +120,33 @@ class BendaharaController extends Controller
         Transaksibendahara::destroy($id);
         return redirect()->route('bendaharaHome');
     }
+    public function fetch(Request $request)
+    {
+        if ($request->get('query')) {
+            $query = $request->get('query');
+            $data = Transaksibendahara::select("keterangan")
+                ->where('keterangan', 'LIKE', "%{$query}%")
+                ->get();
+            $output = '<ul class="dropdown-menu col-md-4" style="display:block; position:relative">';
+            foreach ($data as $row) {
+                $output .= '<li><a class="dropdown-item" href="#">' . $row->keterangan . '</a></li>';
+            }
+            $output .= '</ul>';
+            echo $output;
+        }
+    }
+    public function search(Request $request)
+    {
+        $transaksibendahara = Transaksibendahara::select()
+            ->where('keterangan', '=', "{$request->ket}")
+            ->first();
+        return view('bendahara.detail', ['datatransaksibendahara' => $transaksibendahara]);
+    }
+    public function detail($id)
+    {
+        $transaksibendahara = Transaksibendahara::select()
+            ->where('id', '=', "{$id}")
+            ->first();
+        return view('bendahara.detail', ['datatransaksibendahara' => $transaksibendahara]);
+    }
 }
