@@ -15,7 +15,17 @@ class KoordinatorController extends Controller
     public function index()
     {
         $transaksikoordinator = Transaksikoordinator::get();
-        return view('koordinator.home', ['datatransaksikoordinator' => $transaksikoordinator]);
+        $kredit = Transaksikoordinator::select()
+            ->where('jenistransaksi', '=', "kredit")
+            ->sum('nominal');
+        $debit = Transaksikoordinator::select()
+            ->where('jenistransaksi', '=', "debit")
+            ->sum('nominal');
+        $saldo = $debit - $kredit;
+        return view('koordinator.home', [
+            'datatransaksikoordinator' => $transaksikoordinator,
+            'saldo' => $saldo
+        ]);
     }
 
     /**
@@ -44,8 +54,8 @@ class KoordinatorController extends Controller
             echo $filename;
             $transaksikoordinator->keterangan = $request->keterangan;
             $transaksikoordinator->tanggal = $request->tanggal;
-            $transaksikoordinator->debit = $request->debit;
-            $transaksikoordinator->kredit = $request->kredit;
+            $transaksikoordinator->nominal = $request->nominal;
+            $transaksikoordinator->jenistransaksi = $request->jenistransaksi;
             $transaksikoordinator->gambar = $filename;
             $transaksikoordinator->save();
         } else {
@@ -89,8 +99,8 @@ class KoordinatorController extends Controller
         $transaksikoordinator = Transaksikoordinator::find($request->id);
         $transaksikoordinator->keterangan = $request->keterangan;
         $transaksikoordinator->tanggal = $request->tanggal;
-        $transaksikoordinator->debit = $request->debit;
-        $transaksikoordinator->kredit = $request->kredit;
+        $transaksikoordinator->nominal = $request->nominal;
+        $transaksikoordinator->jenistransaksi = $request->jenistransaksi;
         if ($request->hasFile('files')) {
             $file = $request->file('files');
             $ekstensi = $file->getClientOriginalExtension();
@@ -112,29 +122,6 @@ class KoordinatorController extends Controller
     {
         Transaksikoordinator::destroy($id);
         return redirect()->route('koordinatorHome');
-    }
-    function fetch(Request $request)
-    {
-        if ($request->get('query')) {
-            $query = $request->get('query');
-            $data = Transaksikoordinator::select("keterangan")
-                ->where('keterangan', 'LIKE', "%{$query}%")
-                ->get();
-            $output = '<ul class="dropdown-menu col-md-4" style="display:block; position:relative">';
-            foreach ($data as $row) {
-                $output .= '<li><a class="dropdown-item" href="#">' . $row->keterangan . '</a></li>';
-            }
-            $output .= '</ul>';
-            echo $output;
-        }
-    }
-    function search(Request $request)
-    {
-        $transaksikoordinator = Transaksikoordinator::select()
-            ->where('keterangan', '=', "{$request->ket}")
-            ->first();
-        return view('koordinator.detail', ['datatransaksikoordinator' => $transaksikoordinator]);
-        // dd($request->all());
     }
     function detail($id)
     {

@@ -15,10 +15,23 @@ class BendaharaController extends Controller
     public function index()
     {
         $transaksibendahara = Transaksibendahara::get();
+        $kredit = Transaksibendahara::select()
+            ->where('jenistransaksi', '=', "kredit")
+            ->sum('nominal');
+        $debit = Transaksibendahara::select()
+            ->where('jenistransaksi', '=', "debit")
+            ->sum('nominal');
+        $saldo = $debit - $kredit;
         if (auth()->user()->role == 'bendahara') {
-            return view('bendahara.home', ['datatransaksibendahara' => $transaksibendahara]);
+            return view('bendahara.home', [
+                'datatransaksibendahara' => $transaksibendahara,
+                'saldo' => $saldo
+            ]);
         } else if (auth()->user()->role == 'koordinator') {
-            return view('koordinator.reportbendahara', ['datatransaksibendahara' => $transaksibendahara]);
+            return view('koordinator.reportbendahara', [
+                'datatransaksibendahara' => $transaksibendahara,
+                'saldo' => $saldo
+            ]);
         }
     }
 
@@ -50,8 +63,8 @@ class BendaharaController extends Controller
             echo $filename;
             $transaksibendahara->keterangan = $request->keterangan;
             $transaksibendahara->tanggal = $request->tanggal;
-            $transaksibendahara->debit = $request->debit;
-            $transaksibendahara->kredit = $request->kredit;
+            $transaksibendahara->nominal = $request->nominal;
+            $transaksibendahara->jenistransaksi = $request->jenistransaksi;
             $transaksibendahara->gambar = $filename;
             $transaksibendahara->save();
         } else {
@@ -96,8 +109,8 @@ class BendaharaController extends Controller
         $transaksibendahara = Transaksibendahara::find($request->id);
         $transaksibendahara->keterangan = $request->keterangan;
         $transaksibendahara->tanggal = $request->tanggal;
-        $transaksibendahara->debit = $request->debit;
-        $transaksibendahara->kredit = $request->kredit;
+        $transaksibendahara->nominal = $request->nominal;
+        $transaksibendahara->jenistransaksi = $request->jenistransaksi;
         if ($request->hasFile('files')) {
             $file = $request->file('files');
             $ekstensi = $file->getClientOriginalExtension();
@@ -120,21 +133,7 @@ class BendaharaController extends Controller
         Transaksibendahara::destroy($id);
         return redirect()->route('bendaharaHome');
     }
-    public function fetch(Request $request)
-    {
-        if ($request->get('query')) {
-            $query = $request->get('query');
-            $data = Transaksibendahara::select("keterangan")
-                ->where('keterangan', 'LIKE', "%{$query}%")
-                ->get();
-            $output = '<ul class="dropdown-menu col-md-4" style="display:block; position:relative">';
-            foreach ($data as $row) {
-                $output .= '<li><a class="dropdown-item" href="#">' . $row->keterangan . '</a></li>';
-            }
-            $output .= '</ul>';
-            echo $output;
-        }
-    }
+
     public function search(Request $request)
     {
         $transaksibendahara = Transaksibendahara::select()
@@ -148,5 +147,9 @@ class BendaharaController extends Controller
             ->where('id', '=', "{$id}")
             ->first();
         return view('bendahara.detail', ['datatransaksibendahara' => $transaksibendahara]);
+    }
+    public function pjk()
+    {
+        return view('bendahara.pjk');
     }
 }

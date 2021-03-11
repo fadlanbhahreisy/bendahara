@@ -17,14 +17,14 @@
         <td class="text-left">{{$datatransaksikoordinator->tanggal}}</td>
     </tr>
     <tr>
-        <td class="text-left">Kredit</td>
+        <td class="text-left">Nominal</td>
         <td class="text-center">:</td>
-        <td class="text-left">{{$datatransaksikoordinator->kredit}}</td>
+        <td class="text-left">{{$datatransaksikoordinator->nominal}}</td>
     </tr>
     <tr>
-        <td class="text-left">Debit</td>
+        <td class="text-left">Jenis Transaksi</td>
         <td class="text-center">:</td>
-        <td class="text-left">{{$datatransaksikoordinator->debit}}</td>
+        <td class="text-left">{{$datatransaksikoordinator->jenistransaksi}}</td>
     </tr>
     <tr>
         <td class="text-left">Bukti</td>

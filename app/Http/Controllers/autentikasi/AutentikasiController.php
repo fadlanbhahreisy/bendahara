@@ -25,7 +25,13 @@ class AutentikasiController extends Controller
         //     }
         // }
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/dashboard');
+            if (Auth::user()->role == 'admin') {
+                return redirect('/crud');
+            } else if (Auth::user()->role == 'bendahara') {
+                return redirect()->route('bendaharaHome');
+            } else if (Auth::user()->role == 'koordinator') {
+                return redirect()->route('koordinatorHome');
+            }
         }
         return redirect('/')->with('message', 'email atau password salah');
     }

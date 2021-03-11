@@ -17,8 +17,8 @@ class CreateTransaksikoordinatorsTable extends Migration
             $table->id();
             $table->date('tanggal');
             $table->string('keterangan');
-            $table->double('kredit')->nullable();
-            $table->double('debit')->nullable();
+            $table->double('nominal');
+            $table->string('jenistransaksi');
             $table->string('gambar');
             $table->timestamps();
         });

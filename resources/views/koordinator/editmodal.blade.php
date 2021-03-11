@@ -13,14 +13,20 @@
 </div>
 
 <div class="form-group">
-    <label>Debit</label>
-    <input type="text" value="{{$transaksikoordinator->debit}}" id="debit" name="debit" class="form-control">
+  <label>Nominal</label>
+  <input type="text" name="nominal" value="{{$transaksikoordinator->nominal}}" class="form-control">
 </div>
 
-  <div class="form-group">
-    <label>Kredit</label>
-    <input type="text" value="{{$transaksikoordinator->kredit}}" id="kredit" name="kredit" class="form-control">
+<div class="form-group">
+  <label>Jenis Transaksi</label>
+  <div class="col-sm-12">
+    <select style="width:100%;" class="form-control" id="jenistransaksi" name="jenistransaksi">
+        <option value="{{$transaksikoordinator->jenistransaksi}}">{{$transaksikoordinator->jenistransaksi}}</option>
+        <option value="kredit">Kredit</option>
+        <option value="debit">Debit</option>
+    </select>
   </div>
+</div>
 
 <div class="form-group">
   <label>File</label>

@@ -34,9 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('bendahara/edit/{id}', 'BendaharaController@edit')->name('editbendahara');
         Route::post('bendahara/update', 'BendaharaController@update')->name('updatebendahara');
         Route::delete('bendahara/delete/{id}', 'BendaharaController@destroy')->name('deletebendahara');
-        Route::get('bendahara/search', 'BendaharaController@search')->name('searchbendahara');
-        Route::post('/bendahara/fetch', 'BendaharaController@fetch')->name('bendahara.fetch');
         Route::get('bendahara/detail/{id}', 'BendaharaController@detail')->name('detailbendahara');
+        Route::get('bendahara/pjk', 'BendaharaController@pjk')->name('bendaharaPjk');
     });
     Route::group(['middleware' => 'KoordinatorMiddleware'], function () {
         Route::get('koordinator/home', 'KoordinatorController@index')->name('koordinatorHome');
@@ -45,8 +44,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('koordinator/delete/{id}', 'KoordinatorController@destroy')->name('deletekoordinator');
         Route::get('koordinator/edit/{id}', 'KoordinatorController@edit')->name('editkoordinator');
         Route::post('koordinator/update', 'KoordinatorController@update')->name('updatekoordinator');
-        Route::post('/autocomplete/fetch', 'KoordinatorController@fetch')->name('autocomplete.fetch');
-        Route::get('koordinator/search', 'KoordinatorController@search')->name('searchkoordinator');
         Route::get('koordinator/detail/{id}', 'KoordinatorController@detail')->name('detailkoordinator');
     });
 });

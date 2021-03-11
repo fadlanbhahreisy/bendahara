@@ -1,6 +1,6 @@
 
   <div class="form-group">
-      <input type="text" readonly value="{{$transaksibendahara->id}}" name="id" id="id_transaksi" class="form-control" >
+      <input type="hidden" value="{{$transaksibendahara->id}}" name="id" id="id_transaksi" class="form-control" >
     </div>
   <div class="form-group">
       <label>Keterangan</label>
@@ -13,14 +13,20 @@
   </div>
 
   <div class="form-group">
-      <label>Debit</label>
-      <input type="text" value="{{$transaksibendahara->debit}}" id="debit" name="debit" class="form-control">
-  </div>
+    <label>Nominal</label>
+    <input type="text" name="nominal" value="{{$transaksibendahara->nominal}}" class="form-control">
+</div>
 
-    <div class="form-group">
-      <label>Kredit</label>
-      <input type="text" value="{{$transaksibendahara->kredit}}" id="kredit" name="kredit" class="form-control">
-    </div>
+<div class="form-group">
+  <label>Jenis Transaksi</label>
+  <div class="col-sm-12">
+    <select style="width:100%;" class="form-control" id="jenistransaksi" name="jenistransaksi">
+        <option value="{{$transaksibendahara->jenistransaksi}}">{{$transaksibendahara->jenistransaksi}}</option>
+        <option value="kredit">Kredit</option>
+        <option value="debit">Debit</option>
+    </select>
+  </div>
+</div>
 
   <div class="form-group">
     <label>File</label>
