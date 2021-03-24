@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('bendahara/delete/{id}', 'BendaharaController@destroy')->name('deletebendahara');
         Route::get('bendahara/detail/{id}', 'BendaharaController@detail')->name('detailbendahara');
         Route::get('bendahara/pjk', 'BendaharaController@pjk')->name('bendaharaPjk');
+        Route::post('bendahara/exportpjk', 'BendaharaController@exportpjk')->name('exportpjk');
     });
     Route::group(['middleware' => 'KoordinatorMiddleware'], function () {
         Route::get('koordinator/home', 'KoordinatorController@index')->name('koordinatorHome');

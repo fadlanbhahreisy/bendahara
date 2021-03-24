@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Transaksibendahara;
+use PhpOffice\PhpWord\TemplateProcessor;
+
+use function GuzzleHttp\Promise\all;
 
 class BendaharaController extends Controller
 {
@@ -151,5 +154,32 @@ class BendaharaController extends Controller
     public function pjk()
     {
         return view('bendahara.pjk');
+    }
+    public function exportpjk(Request $request)
+    {
+        //Praktikum
+        $templateProcessor = new TemplateProcessor('pjk.docx');
+        $templateProcessor->setValue('nomor', $request->nomor);
+        $templateProcessor->setValue('perihal', $request->perihal);
+        $templateProcessor->setValue('praktikum', $request->praktikum);
+        $templateProcessor->setValue('lulus', $request->lulus);
+        $templateProcessor->setValue('tidaklulus', $request->tidaklulus);
+        $templateProcessor->setValue('gugur', $request->gugur);
+        $templateProcessor->setValue('dana', $request->dana);
+        //Biaya Praktikum
+        $templateProcessor->setValue('jumlahpeserta', $request->jumlahpeserta);
+        $templateProcessor->setValue('perkelas', $request->perkelas);
+        $templateProcessor->setValue('jumlahmodul', $request->jumlahmodul);
+        $templateProcessor->setValue('lamapraktikum', $request->lamapraktikum);
+        $templateProcessor->setValue('sks', $request->sks);
+        $templateProcessor->setValue('sertifikat', $request->sertifikat);
+        $templateProcessor->setValue('operasional', $request->operasional);
+        $templateProcessor->setValue('koordinator', $request->koordinator);
+        $templateProcessor->setValue('administrator', $request->administrator);
+        $templateProcessor->setValue('kebersihan', $request->kebersihan);
+        $templateProcessor->setValue('bimbingan', $request->bimbingan);
+        $fileName = "DataPJK";
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->download($fileName . '.docx')->deleteFileAfterSend(true);
     }
 }
