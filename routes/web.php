@@ -35,8 +35,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('bendahara/update', 'BendaharaController@update')->name('updatebendahara');
         Route::delete('bendahara/delete/{id}', 'BendaharaController@destroy')->name('deletebendahara');
         Route::get('bendahara/detail/{id}', 'BendaharaController@detail')->name('detailbendahara');
+        //pjk
         Route::get('bendahara/pjk', 'BendaharaController@pjk')->name('bendaharaPjk');
-        Route::post('bendahara/exportpjk', 'BendaharaController@exportpjk')->name('exportpjk');
+        Route::post('bendahara/insertpjk', 'BendaharaController@insertpjk')->name('insertpjk');
+        Route::get('bendahara/addpjk', 'BendaharaController@addpjk')->name('addpjk');
+        Route::delete('bendahara/deletepjk/{id}', 'BendaharaController@destroypjk')->name('deletepjk');
+        Route::get('bendahara/detailpjk/{id}', 'BendaharaController@detailpjk')->name('detailpjk');
+        Route::get('bendahara/exportpjk/{id}', 'BendaharaController@exportpjk')->name('exportpjk');
+        Route::get('bendahara/editpjk/{id}', 'BendaharaController@editpjk')->name('editpjk');
+        Route::get('bendahara/updatepjk/{id}', 'BendaharaController@updatepjk')->name('updatepjk');
     });
     Route::group(['middleware' => 'KoordinatorMiddleware'], function () {
         Route::get('koordinator/home', 'KoordinatorController@index')->name('koordinatorHome');

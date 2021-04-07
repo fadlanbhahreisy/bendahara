@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transaksibendahara;
 use PhpOffice\PhpWord\TemplateProcessor;
-
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Carbon\Carbon;
 use function GuzzleHttp\Promise\all;
+use App\pjk;
 
 class BendaharaController extends Controller
 {
@@ -153,33 +156,173 @@ class BendaharaController extends Controller
     }
     public function pjk()
     {
-        return view('bendahara.pjk');
+        $pjk = pjk::get();
+        return view('bendahara.pjk', ['pjk' => $pjk]);
     }
-    public function exportpjk(Request $request)
+    public function addpjk()
     {
-        //Praktikum
-        $templateProcessor = new TemplateProcessor('pjk.docx');
-        $templateProcessor->setValue('nomor', $request->nomor);
-        $templateProcessor->setValue('perihal', $request->perihal);
-        $templateProcessor->setValue('praktikum', $request->praktikum);
-        $templateProcessor->setValue('lulus', $request->lulus);
-        $templateProcessor->setValue('tidaklulus', $request->tidaklulus);
-        $templateProcessor->setValue('gugur', $request->gugur);
-        $templateProcessor->setValue('dana', $request->dana);
-        //Biaya Praktikum
-        $templateProcessor->setValue('jumlahpeserta', $request->jumlahpeserta);
-        $templateProcessor->setValue('perkelas', $request->perkelas);
-        $templateProcessor->setValue('jumlahmodul', $request->jumlahmodul);
-        $templateProcessor->setValue('lamapraktikum', $request->lamapraktikum);
-        $templateProcessor->setValue('sks', $request->sks);
-        $templateProcessor->setValue('sertifikat', $request->sertifikat);
-        $templateProcessor->setValue('operasional', $request->operasional);
-        $templateProcessor->setValue('koordinator', $request->koordinator);
-        $templateProcessor->setValue('administrator', $request->administrator);
-        $templateProcessor->setValue('kebersihan', $request->kebersihan);
-        $templateProcessor->setValue('bimbingan', $request->bimbingan);
-        $fileName = "DataPJK";
-        $templateProcessor->saveAs($fileName . '.docx');
-        return response()->download($fileName . '.docx')->deleteFileAfterSend(true);
+        return view('bendahara.addpjk');
+    }
+    public function insertpjk(Request $request)
+    {
+        //praktikum
+        $pjk = new pjk();
+        $pjk->judul = $request->judul;
+        $pjk->tanggal = $request->tanggal;
+        $pjk->lampiran = $request->lampiran;
+        $pjk->praktikum = $request->praktikum;
+        $pjk->periode = $request->periode;
+        $pjk->lulus = $request->lulus;
+        $pjk->tidaklulus = $request->tidaklulus;
+        $pjk->gugur = $request->gugur;
+        $pjk->jumlahpeserta = $request->jumlahpeserta;
+        $pjk->jumlahkelas = $request->kelas;
+        $pjk->jumlahpesertaperkelas = $request->perkelas;
+        $pjk->jumlahmodul = $request->jumlahmodul;
+        $pjk->lamapraktikum = $request->lamapraktikum;
+
+        //biaya
+        $pjk->sks = $request->sks;
+        $pjk->sertifikat = $request->sertifikat;
+        $pjk->operasional = $request->operasional;
+        $pjk->koordinator = $request->koordinator;
+        $pjk->administrator = $request->administrator;
+        $pjk->kebersihan = $request->kebersihan;
+        $pjk->bimbingan = $request->bimbingan;
+
+        //kasbon
+        $pjk->honorarium = $request->honorarium;
+        $pjk->biayamodul = $request->biayamodul;
+        $pjk->save();
+        return redirect()->route('bendaharaPjk');
+    }
+    public function detailpjk($id)
+    {
+        $pjk = pjk::select()
+            ->where('id', '=', "{$id}")
+            ->first();
+        return view('bendahara.detailpjk', ['pjk' => $pjk]);
+    }
+    public function exportpjk(Request $request, $id)
+    {
+        $pjk = pjk::select()
+            ->where('id', '=', "{$id}")
+            ->first();
+        $tanggal = Carbon::parse($pjk->tanggal)->isoFormat('D MMMM Y');
+        $tanggal2 = Carbon::parse($pjk->tanggal)->isoFormat('D/M/Y');
+        $tahun = Carbon::parse($pjk->tanggal)->isoFormat('Y');
+        $danapraktikum = $pjk->sks + $pjk->sertifikat + $pjk->operasional + $pjk->koordinator + $pjk->administrator + $pjk->kebersihan + $pjk->bimbingan;
+        $termin1 = $pjk->sertifikat + $pjk->operasional;
+        $termin2 = $pjk->sks + $pjk->koordinator + $pjk->administrator + $pjk->kebersihan + $pjk->bimbingan;
+        $dana = $pjk->honorarium + $pjk->biayamodul;
+        $biayapendaftaran = $pjk->administrator + $pjk->jumlahpesertaperkelas;
+        $presentasedana = ($danapraktikum / $biayapendaftaran) * 100;
+        if ($request->input('action') == "cetakDoc") {
+            $templateProcessor = new TemplateProcessor('pjk.docx');
+            $templateProcessor->setValue('tanggal', $tanggal);
+            $templateProcessor->setValue('tahun', $tahun);
+            $templateProcessor->setValue('praktikum', $pjk->praktikum);
+            $templateProcessor->setValue('periode', $pjk->periode);
+            $templateProcessor->setValue('lulus', $pjk->lulus);
+            $templateProcessor->setValue('tidaklulus', $pjk->tidaklulus);
+            $templateProcessor->setValue('gugur', $pjk->gugur);
+            //Biaya Praktikum
+            $templateProcessor->setValue('jumlahpeserta', $pjk->jumlahpeserta);
+            $templateProcessor->setValue('perkelas', $pjk->jumlahpesertaperkelas);
+            $templateProcessor->setValue('jumlahmodul', $pjk->jumlahmodul);
+            $templateProcessor->setValue('lamapraktikum', $pjk->lamapraktikum);
+            $templateProcessor->setValue('sks', number_format($pjk->sks));
+            $templateProcessor->setValue('sertifikat', number_format($pjk->sertifikat));
+            $templateProcessor->setValue('operasional', number_format($pjk->operasional));
+            $templateProcessor->setValue('koordinator', number_format($pjk->koordinator));
+            $templateProcessor->setValue('administrator', number_format($pjk->administrator));
+            $templateProcessor->setValue('kebersihan', number_format($pjk->kebersihan));
+            $templateProcessor->setValue('bimbingan', number_format($pjk->bimbingan));
+            $templateProcessor->setValue('danapraktikum', number_format($danapraktikum));
+            $templateProcessor->setValue('termin1', number_format($termin1));
+            $templateProcessor->setValue('termin2', number_format($termin2));
+            $templateProcessor->setValue('biayapendaftaran', number_format($biayapendaftaran));
+            $templateProcessor->setValue('sen', $presentasedana);
+            //kasbom
+            $templateProcessor->setValue('honorarium', number_format($pjk->honorarium));
+            $templateProcessor->setValue('biayamodul', number_format($pjk->biayamodul));
+            $templateProcessor->setValue('dana', number_format($dana));
+            $fileName = "DataPJK";
+            $templateProcessor->saveAs($fileName . '.docx');
+            return response()->download($fileName . '.docx')->deleteFileAfterSend(true);
+        } else if ($request->input('action') == "cetakExcel") {
+            $reader = IOFactory::createReader('Xls');
+            $sheet = $reader->load('pjkexcel.xls');
+            //kasbon
+            $sheet->getSheetByName('Kasbon')->setCellValue('c2', '/LJK/ITATS/II/' . $tahun);
+            $sheet->getSheetByName('Kasbon')->setCellValue('f16', $pjk->honorarium);
+            $sheet->getSheetByName('Kasbon')->setCellValue('f17', $pjk->biayamodul);
+            $sheet->getSheetByName('Kasbon')->setCellValue('b16', $tanggal2);
+            $sheet->getSheetByName('Kasbon')->setCellValue('e16', 'Honorarium Pelaksanaan Praktikum ' . $pjk->praktikum . ' Periode ' . $pjk->periode . ' T.A ' . $tahun);
+            $sheet->getSheetByName('Kasbon')->setCellValue('e17', 'Penjilidan Soft Cover Modul ' . $pjk->praktikum);
+            //rincian
+            $sheet->getSheetByName('rincian')->setCellValue('e2', $pjk->operasional);
+            $sheet->getSheetByName('rincian')->setCellValue('e4', $pjk->koordinator);
+            $sheet->getSheetByName('rincian')->setCellValue('e5', $pjk->administrator);
+            $sheet->getSheetByName('rincian')->setCellValue('e6', 0);
+            $sheet->getSheetByName('rincian')->setCellValue('e7', $pjk->kebersihan);
+            for ($i = 1; $i <= 7; $i++) {
+                $sheet->getSheetByName('rincian')->setCellValue('g' . $i, $pjk->jumlahpeserta);
+            }
+            $sheet->getSheetByName('rincian')->setCellValue('j8', $pjk->bimbingan);
+            $sheet->getSheetByName('rincian')->setCellValue('j9', $pjk->sertifikat);
+
+            //termin1+2
+            $sheet->getSheetByName('Termin I+II')->setCellValue('e6', $pjk->sks);
+            $sheet->getSheetByName('Termin I+II')->setCellValue('g6', $pjk->jumlahkelas);
+
+            $writer = new Xls($sheet);
+            $writer->save("DataPJK.xls");
+            return response()->download('DataPJK.xls')->deleteFileAfterSend(true);
+        }
+    }
+    public function editpjk($id)
+    {
+        $pjk = pjk::select()
+            ->where('id', '=', "{$id}")
+            ->first();
+        return view('bendahara.editpjk', ['pjk' => $pjk]);
+    }
+    public function updatepjk(Request $request, $id)
+    {
+        $pjk = pjk::find($id);
+        $pjk->judul = $request->judul;
+        $pjk->tanggal = $request->tanggal;
+        $pjk->lampiran = $request->lampiran;
+        $pjk->praktikum = $request->praktikum;
+        $pjk->periode = $request->periode;
+        $pjk->lulus = $request->lulus;
+        $pjk->tidaklulus = $request->tidaklulus;
+        $pjk->gugur = $request->gugur;
+        $pjk->jumlahpeserta = $request->jumlahpeserta;
+        $pjk->jumlahkelas = $request->kelas;
+        $pjk->jumlahpesertaperkelas = $request->perkelas;
+        $pjk->jumlahmodul = $request->jumlahmodul;
+        $pjk->lamapraktikum = $request->lamapraktikum;
+
+        //biaya
+        $pjk->sks = $request->sks;
+        $pjk->sertifikat = $request->sertifikat;
+        $pjk->operasional = $request->operasional;
+        $pjk->koordinator = $request->koordinator;
+        $pjk->administrator = $request->administrator;
+        $pjk->kebersihan = $request->kebersihan;
+        $pjk->bimbingan = $request->bimbingan;
+
+        //kasbon
+        $pjk->honorarium = $request->honorarium;
+        $pjk->biayamodul = $request->biayamodul;
+        $pjk->save();
+        return redirect()->route('bendaharaPjk');
+    }
+    public function destroypjk($id)
+    {
+        pjk::destroy($id);
+        return redirect()->route('bendaharaPjk');
     }
 }

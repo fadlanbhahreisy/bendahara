@@ -18,7 +18,7 @@
           <a href="{{route('bendaharaHome')}}" class="nav-link"><i class="fas fa-columns"></i> <span>Bendahara</span></a>
         </li>
         <li class="nav-item">
-          <a href="{{route('bendaharaPjk')}}" class="nav-link"><i class="fas fa-columns"></i> <span>Export PJK</span></a>
+          <a href="{{route('bendaharaPjk')}}" class="nav-link"><i class="fas fa-columns"></i> <span>PJK</span></a>
         </li>
         @elseif(Auth::user()->role=='koordinator')
         <li class="active"><a class="nav-link" href="{{route('koordinatorHome')}}"><i class="far fa-square"></i> <span>Koordinator</span></a></li>

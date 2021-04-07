@@ -17,6 +17,7 @@
     </div> 
 </div>
 <div class="mt-5">
+
   <table class="table table-striped display" id="tabel_bendahara">
     <thead>
       <tr>

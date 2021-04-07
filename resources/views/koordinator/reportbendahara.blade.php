@@ -5,8 +5,9 @@
     <h1>Report Bendahara</h1>
 @endsection
 @section('section-body')
-<div class="row">
-    <table class="table table-striped">
+
+    <table class="table table-striped" id="report_table">
+      <thead>
         <tr>
           <th>No</th>
           <th>Keterangan</th>
@@ -16,7 +17,8 @@
           <th>Bukti</th>
 
         </tr>
-        
+      </thead>
+        <tbody>
           @foreach ($datatransaksibendahara as $no => $data)
           <tr>
             <td>{{$no+1}}</td>
@@ -27,7 +29,15 @@
               <td><img src="{{asset('uploads/'.$data->gambar)}}" alt="" width="200px"></td>
           </tr>
           @endforeach
+        </tbody>
     </table>
 {{$saldo}}
-</div>
+
 @endsection
+@push('after-scripts')
+    <script>
+      $(document).ready( function () {
+        $('#report_table').DataTable();
+      } );
+    </script>
+@endpush
