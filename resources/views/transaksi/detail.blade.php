@@ -1,9 +1,16 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@section('judul','Bendahara Page')
+@if (auth()->user()->role_id == '2')
+  @section('judul','Bendahara Page')
+@elseif(auth()->user()->role_id == '3')
+  @section('judul','Koordinator Page')
+@elseif(auth()->user()->role_id == '4')
+  @section('judul','Ka Lab Page')
+@endif
 @section('section-header')
     <h1>Detail Transaksi Bendahara</h1>
 @endsection
+
 @section('section-body')
 <table>
     <tr>
@@ -34,5 +41,4 @@
         </td>
     </tr>
 </table>
-
 @endsection

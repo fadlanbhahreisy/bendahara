@@ -1,8 +1,14 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@section('judul','Bendahara Page')
+@if (auth()->user()->role_id == '2')
+  @section('judul','Bendahara Page')
+@elseif(auth()->user()->role_id == '3')
+  @section('judul','Koordinator Page')
+@elseif(auth()->user()->role_id == '4')
+  @section('judul','Ka Lab Page')
+@endif
 @section('section-header')
-    <h1>Detail Transaksi Bendahara</h1>
+    <h1>Detail Pjk</h1>
 @endsection
 @section('section-body')
 <table>
@@ -117,7 +123,7 @@
     </tr>
 </table>
 <form action="{{route('exportpjk',$pjk->id)}}">
-    <button type="submit" name="action" class="btn btn-primary" value="cetakDoc">cetak Doc</button>
-    <button type="submit" name="action" class="btn btn-primary" value="cetakExcel">cetak Excel</button>
+    <button type="submit" name="action" class="btn btn-primary" value="cetakDoc"><i class="fas fa-file-word"></i> cetak Doc</button>
+    <button type="submit" name="action" class="btn btn-primary" value="cetakExcel"><i class="fas fa-file-excel"></i> cetak Excel</button>
 </form>
 @endsection

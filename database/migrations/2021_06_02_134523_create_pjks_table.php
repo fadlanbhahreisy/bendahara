@@ -37,6 +37,8 @@ class CreatePjksTable extends Migration
             $table->integer('bimbingan');
             $table->integer('honorarium');
             $table->integer('biayamodul');
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,17 +1,25 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@section('judul','Bendahara Page')
+@if (auth()->user()->role_id == '2')
+  @section('judul','Bendahara Page')
+@elseif(auth()->user()->role_id == '3')
+  @section('judul','Koordinator Page')
+@elseif(auth()->user()->role_id == '4')
+  @section('judul','Ka Lab Page')
+@endif
 
 @section('section-header')
     <h1>PJK</h1>
 @endsection
 @section('section-body')
 <div class="container">
+  @if (auth()->user()->role_id == '2')
   <div class="row">
     <div class="col-md-2">
         <a href="{{route('addpjk')}}" class="btn btn-icon icon-left btn-primary"><i class="fa fa-plus"></i>Add</a>
     </div>
-</div>
+  </div>
+  @endif
 <div class="mt-5">
 
   <table class="table table-striped display" id="tabel_bendahara">
@@ -30,6 +38,7 @@
           <td>{{$no+1}}</td>
           <td>{{$data->judul}}</td>
           <td>
+            @if (auth()->user()->role_id == '2')
             <a href="{{route('editpjk',$data->id)}}" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>
             <a href="#" data-id="{{$data->id}}" class="btn btn-danger swal-confirm" title="hapus"><i class="fa fa-trash "></i>
               <form action="{{route('deletepjk',$data->id)}}" id="delete{{$data->id}}" method="post">
@@ -37,6 +46,7 @@
                 @method('delete')
               </form>
             </a>
+            @endif
             <a href="{{route('detailpjk',$data->id)}}" class="btn btn-primary" title="detail"><i class="fa fa-play"></i></a>
           </td>
         </tr>

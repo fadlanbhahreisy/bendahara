@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'AdminMiddleware' => \App\Http\Middleware\AdminMiddleware::class,
         'BendaharaMiddleware' => \App\Http\Middleware\BendaharaMiddleware::class,
         'KoordinatorMiddleware' => \App\Http\Middleware\KoordinatorMiddleware::class,
+        'KalabMiddleware' => \App\Http\Middleware\KalabMiddleware::class,
     ];
 }

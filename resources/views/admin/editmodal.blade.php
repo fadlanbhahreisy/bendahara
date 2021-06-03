@@ -20,9 +20,10 @@
     <label>role</label>
     <div class="col-sm-12">
       <select style="width:100%;" class="form-control" id="role" name="role">
-          <option value="">{{$pilih_user->role}}</option>
-          <option value="admin">Admin</option>
-          <option value="bendahara">Bendahara</option>
-          <option value="koordinator">Koordinator</option>
+          <option value="1">{{$pilih_user->role}}</option>
+          <option value="1">Admin</option>
+          <option value="2">Bendahara</option>
+          <option value="3">Koordinator</option>
+          <option value="4">Ka Lab</option>
       </select>
   </div>

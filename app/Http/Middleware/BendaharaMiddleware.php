@@ -15,7 +15,7 @@ class BendaharaMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->role == 'bendahara') {
+        if (auth()->user()->role_id == '2') {
             return $next($request);
         }
         return redirect('/')->with('error', "You don't have admin access.");

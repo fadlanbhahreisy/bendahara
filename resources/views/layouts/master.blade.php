@@ -18,6 +18,7 @@
   <link rel="stylesheet" href={{asset('assets/css/components.css')}}">
   
   @stack('page-styles')
+ 
 </head>
 
 <body>

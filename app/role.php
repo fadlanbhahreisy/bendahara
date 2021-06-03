@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class pjk extends Model
+class role extends Model
 {
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 }

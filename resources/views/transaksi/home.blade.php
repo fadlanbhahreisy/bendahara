@@ -1,23 +1,57 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@section('judul','Bendahara Page')
+@if (auth()->user()->role_id == '2')
+  @section('judul','Bendahara Page')
 
-@section('section-header')
-    <h1>bendahara</h1>
-@endsection
+  @section('section-header')
+      <h1>bendahara</h1>
+  @endsection
+@elseif(auth()->user()->role_id == '3')
+  @section('judul','Koordinator Page')
+
+  @section('section-header')
+      <h1>Koordinator</h1>
+  @endsection
+@elseif(auth()->user()->role_id == '4')
+  @section('judul','Ka Lab Page')
+
+  @section('section-header')
+      <h1>Ka Lab</h1>
+  @endsection
+@endif
+
 @section('section-body')
 <div class="container">
   <div class="row">
     <div class="col-md-2">
+      @if (auth()->user()->role_id == '2')
         <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
-    </div>
-    <div class="col-md-4">
-      <label for="">Saldo</label>
-      <input type="text" value="{{$saldo}}">
-    </div> 
+      @endif
+      </div>
 </div>
 <div class="mt-5">
-
+<form action="{{route('filterbendahara')}}" method="POST">
+  @csrf
+  <div class="container">
+    <div class="row">
+      <div class="container-fluid">
+        <div class="form-group row">
+          <label for="date" class="col-form-label col-sm-2">from</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control input-sm" id="from" name="from">
+          </div>
+          <label for="date" class="col-form-label col-sm-2">to</label>
+          <div class="col-sm-3">
+            <input type="date" class="form-control input-sm" id="to" name="to">
+          </div>
+          <div class="col-sm-2">
+            <button type="submit" class="btn btn-success" name="search">Filter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
   <table class="table table-striped display" id="tabel_bendahara">
     <thead>
       <tr>
@@ -26,8 +60,10 @@
         <th>Tanggal</th>
         <th>Nominal</th>
         <th>Jenis Transaksi</th>
+        <th>Status</th>
         <th>Bukti</th>
         <th>Action</th>
+        
 
       </tr>
     </thead>
@@ -40,23 +76,33 @@
             <td>{{$data->tanggal}}</td>
             <td>{{$data->nominal}}</td>
             <td>{{$data->jenistransaksi}}</td>
+              <td>
+                <?= $data->status == 0 ? '<span class="badge badge-danger">Belum Di-Verif</span>' : '<span class="badge badge-success">Telah Di Verif</span>'; ?>
+              </td>
             <td><img src="{{asset('uploads/'.$data->gambar)}}" alt="" width="200px"></td>
             <td>
-              <a href="#" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>
-              <a href="#" data-id="{{$data->id}}" class="btn btn-danger swal-confirm" title="hapus"><i class="fa fa-trash "></i>
-                <form action="{{route('deletebendahara',$data->id)}}" id="delete{{$data->id}}" method="post">
-                  @csrf
-                  @method('delete')
-                </form>
-              </a>
-              <a href="{{route('detailbendahara',$data->id)}}" class="btn btn-primary" title="detail"><i class="fa fa-play"></i></a>
+              @if (auth()->user()->role_id == '2')
+                <a href="#" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>
+                <a href="#" data-id="{{$data->id}}" class="btn btn-danger swal-confirm" title="hapus"><i class="fa fa-trash "></i>
+                  <form action="{{route('deletebendahara',$data->id)}}" id="delete{{$data->id}}" method="post">
+                    @csrf
+                    @method('delete')
+                  </form>
+                </a>
+              @elseif(auth()->user()->role_id == '4')
+                <?php if ($data->status == 0) : ?>
+                    <a href="{{route('verif',$data->id)}}" class="btn btn-success">Verif</a>
+                <?php else : ?>
+                    <a href="{{route('unverif',$data->id)}}" class="btn btn-danger">Un-Verif</a>
+                <?php endif; ?>
+              @endif
+                <a href="{{route('detailbendahara',$data->id)}}" class="btn btn-primary" title="detail"><i class="fa fa-play"></i></a>
             </td>
         </tr>
         @endforeach
       </tbody>
         
   </table>
-  {{$saldo}}
 </div>
 </div>
 
@@ -95,8 +141,9 @@
               <div class="col-sm-12">
                 <select style="width:100%;" class="form-control" id="jenistransaksi" name="jenistransaksi">
                     <option value="-">- Select -</option>
-                    <option value="kredit">Kredit</option>
-                    <option value="debit">Debit</option>
+                    @foreach ($jenis as $row)
+                      <option value="{{$row->id}}">{{$row->jenis}}</option>
+                    @endforeach
                 </select>
               </div>
             </div>
@@ -146,7 +193,7 @@ $(".swal-confirm").click(function(e) {
   id = e.target.dataset.id;
   swal({
       title: 'Are you sure?',
-      text: 'Once deleted, you will not be able to recover this imaginary file!',
+      text: 'Once deleted, you will not be able to recover this file!',
       icon: 'warning',
       buttons: true,
       dangerMode: true,

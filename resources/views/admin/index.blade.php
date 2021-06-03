@@ -75,9 +75,10 @@
             <div class="col-sm-12">
               <select style="width:100%;" class="form-control" id="role" name="role">
                   <option value="-">- Select Role -</option>
-                  <option value="admin">Admin</option>
-                  <option value="bendahara">Bendahara</option>
-                  <option value="koordinator">Koordinator</option>
+                  <option value="1">Admin</option>
+                  <option value="2">Bendahara</option>
+                  <option value="3">Koordinator</option>
+                  <option value="4">Ka Lab</option>
               </select>
           </div>
           </div>
@@ -124,7 +125,7 @@ $(".swal-confirm").click(function(e) {
   id = e.target.dataset.id;
   swal({
       title: 'Are you sure?',
-      text: 'Once deleted, you will not be able to recover this imaginary file!',
+      text: 'Once deleted, you will not be able to recover this file!',
       icon: 'warning',
       buttons: true,
       dangerMode: true,

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\role;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -15,7 +17,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $user = User::get();
+        $user = DB::table('users')
+            ->select('users.id', 'users.email', 'users.name', 'roles.role')
+            ->join('roles', 'roles.id', '=', 'users.role_id')->get();
         return view('admin.index', ['data_user' => $user]);
     }
 
@@ -40,13 +44,14 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required'
         ]);
+        // dd($request->all());
+        $role = role::find($request->role);
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->role = $request->role;
-        // dd($request->all());
-        $user->save();
+
+        $role->users()->save($user);
         return redirect()->route('crud');
     }
     function message()
@@ -73,7 +78,10 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = User::select('users.id', 'users.email', 'users.name', 'roles.role')
+            ->join('roles', 'roles.id', '=', 'users.role_id')
+            ->where('users.id', '=', "{$id}")
+            ->first();
         return view('admin.editmodal', ['pilih_user' => $user]);
     }
 
@@ -87,7 +95,7 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
 
-        User::where('id', $id)->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password), 'role' => $request->role]);
+        User::where('id', $id)->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password), 'role_id' => $request->role]);
     }
 
     /**

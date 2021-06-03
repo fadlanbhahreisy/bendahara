@@ -18,8 +18,12 @@ class CreateTransaksibendaharasTable extends Migration
             $table->date('tanggal');
             $table->string('keterangan');
             $table->double('nominal');
-            $table->string('jenistransaksi');
-            $table->string('gambar');
+            $table->string('gambar')->nullable();
+            $table->boolean('status');
+            $table->bigInteger('jenistransaksi_id')->unsigned();
+            $table->foreign('jenistransaksi_id')->references('id')->on('jenistransaksis')->onDelete('cascade');
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

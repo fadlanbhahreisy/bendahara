@@ -31,7 +31,7 @@
         <label class="col-sm-2 col-form-label">Praktikum</label>
         <div class="col-sm-10">
           <select style="width:100%;" class="form-control" id="praktikum" name="praktikum">
-              <option value="-">- Select -</option>
+              <option value="-">-- Select Praktikum -</option>
               <option value="Pemrograman Berorientasi Objek">Pemrograman Berorientasi Objek</option>
               <option value="Basis Data">Basis Data</option>
           </select>

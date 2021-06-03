@@ -10,6 +10,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Carbon\Carbon;
 use function GuzzleHttp\Promise\all;
 use App\pjk;
+use App\Jenistransaksi;
+use Illuminate\Support\Facades\DB;
 
 class BendaharaController extends Controller
 {
@@ -18,27 +20,49 @@ class BendaharaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getSaldo()
     {
         $transaksibendahara = Transaksibendahara::get();
         $kredit = Transaksibendahara::select()
-            ->where('jenistransaksi', '=', "kredit")
+            ->where('jenistransaksi_id', '=', "1")
             ->sum('nominal');
         $debit = Transaksibendahara::select()
-            ->where('jenistransaksi', '=', "debit")
+            ->where('jenistransaksi_id', '=', "2")
             ->sum('nominal');
         $saldo = $debit - $kredit;
-        if (auth()->user()->role == 'bendahara') {
-            return view('bendahara.home', [
-                'datatransaksibendahara' => $transaksibendahara,
-                'saldo' => $saldo
-            ]);
-        } else if (auth()->user()->role == 'koordinator') {
-            return view('koordinator.reportbendahara', [
-                'datatransaksibendahara' => $transaksibendahara,
-                'saldo' => $saldo
-            ]);
-        }
+        return $saldo;
+    }
+
+    public function dashboard()
+    {
+        $transaksibendahara = Transaksibendahara::get();
+        $counttransaksi = count($transaksibendahara);
+        $pjk = pjk::get();
+        $countpjk = count($pjk);
+        return view('transaksi.dashboard', [
+            'jumlahtransaksi' => $counttransaksi,
+            'saldo' => $this->getSaldo(),
+            'jumlahpjk' => $countpjk
+        ]);
+    }
+    public function index()
+    {
+        $transaksibendahara = Transaksibendahara::select(
+            'transaksibendaharas.id',
+            'transaksibendaharas.tanggal',
+            'transaksibendaharas.nominal',
+            'transaksibendaharas.keterangan',
+            'transaksibendaharas.status',
+            'transaksibendaharas.gambar',
+            'jenistransaksis.jenis as jenistransaksi'
+        )
+            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')->get();
+        $jenistransaksi = Jenistransaksi::get();
+        return view('transaksi.home', [
+            'datatransaksibendahara' => $transaksibendahara,
+            'saldo' => $this->getSaldo(),
+            'jenis' => $jenistransaksi
+        ]);
     }
 
     /**
@@ -70,8 +94,10 @@ class BendaharaController extends Controller
             $transaksibendahara->keterangan = $request->keterangan;
             $transaksibendahara->tanggal = $request->tanggal;
             $transaksibendahara->nominal = $request->nominal;
-            $transaksibendahara->jenistransaksi = $request->jenistransaksi;
+            $transaksibendahara->jenistransaksi_id = $request->jenistransaksi;
+            $transaksibendahara->user_id = auth()->user()->id;
             $transaksibendahara->gambar = $filename;
+            $transaksibendahara->status = FALSE;
             $transaksibendahara->save();
         } else {
             echo "file belum ada";
@@ -98,8 +124,24 @@ class BendaharaController extends Controller
      */
     public function edit($id)
     {
-        $transaksibendahara = Transaksibendahara::find($id);
-        return view('bendahara.editmodal', ['transaksibendahara' => $transaksibendahara]);
+        $transaksibendahara = Transaksibendahara::select(
+            'transaksibendaharas.id',
+            'transaksibendaharas.tanggal',
+            'transaksibendaharas.nominal',
+            'transaksibendaharas.keterangan',
+            'transaksibendaharas.status',
+            'transaksibendaharas.gambar',
+            'transaksibendaharas.jenistransaksi_id',
+            'jenistransaksis.jenis as jenistransaksi'
+        )
+            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')
+            ->where('transaksibendaharas.id', '=', "{$id}")
+            ->first();
+        $jenistransaksi = Jenistransaksi::get();
+        return view('transaksi.editmodal', [
+            'transaksibendahara' => $transaksibendahara,
+            'jenis' => $jenistransaksi
+        ]);
     }
 
     /**
@@ -116,7 +158,9 @@ class BendaharaController extends Controller
         $transaksibendahara->keterangan = $request->keterangan;
         $transaksibendahara->tanggal = $request->tanggal;
         $transaksibendahara->nominal = $request->nominal;
-        $transaksibendahara->jenistransaksi = $request->jenistransaksi;
+        $transaksibendahara->jenistransaksi_id = $request->jenistransaksi;
+        $transaksibendahara->user_id = auth()->user()->id;
+        $transaksibendahara->jenistransaksi_id = $request->jenistransaksi;
         if ($request->hasFile('files')) {
             $file = $request->file('files');
             $ekstensi = $file->getClientOriginalExtension();
@@ -145,23 +189,56 @@ class BendaharaController extends Controller
         $transaksibendahara = Transaksibendahara::select()
             ->where('keterangan', '=', "{$request->ket}")
             ->first();
-        return view('bendahara.detail', ['datatransaksibendahara' => $transaksibendahara]);
+        return view('transaksi.detail', ['datatransaksibendahara' => $transaksibendahara]);
+    }
+    public function filter(Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        $filter = Transaksibendahara::select(
+            'transaksibendaharas.id',
+            'transaksibendaharas.tanggal',
+            'transaksibendaharas.nominal',
+            'transaksibendaharas.keterangan',
+            'transaksibendaharas.status',
+            'transaksibendaharas.gambar',
+            'jenistransaksis.jenis as jenistransaksi'
+        )
+            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')
+            ->where('transaksibendaharas.tanggal', '>=', $from)
+            ->where('transaksibendaharas.tanggal', '<=', $to)
+            ->get();
+        $jenistransaksi = Jenistransaksi::get();
+        return view('transaksi.home', [
+            'datatransaksibendahara' => $filter,
+            'saldo' => $this->getSaldo(),
+            'jenis' => $jenistransaksi
+        ]);
     }
     public function detail($id)
     {
-        $transaksibendahara = Transaksibendahara::select()
-            ->where('id', '=', "{$id}")
+        $transaksibendahara = Transaksibendahara::select(
+            'transaksibendaharas.id',
+            'transaksibendaharas.tanggal',
+            'transaksibendaharas.nominal',
+            'transaksibendaharas.keterangan',
+            'transaksibendaharas.status',
+            'transaksibendaharas.gambar',
+            'jenistransaksis.jenis as jenistransaksi'
+        )
+            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')
+            ->where('transaksibendaharas.id', '=', "{$id}")
             ->first();
-        return view('bendahara.detail', ['datatransaksibendahara' => $transaksibendahara]);
+        return view('transaksi.detail', ['datatransaksibendahara' => $transaksibendahara]);
     }
     public function pjk()
     {
         $pjk = pjk::get();
-        return view('bendahara.pjk', ['pjk' => $pjk]);
+        return view('pjk.pjk', ['pjk' => $pjk]);
     }
     public function addpjk()
     {
-        return view('bendahara.addpjk');
+        return view('pjk.addpjk');
     }
     public function insertpjk(Request $request)
     {
@@ -193,6 +270,7 @@ class BendaharaController extends Controller
         //kasbon
         $pjk->honorarium = $request->honorarium;
         $pjk->biayamodul = $request->biayamodul;
+        $pjk->user_id = auth()->user()->id;
         $pjk->save();
         return redirect()->route('bendaharaPjk');
     }
@@ -201,7 +279,7 @@ class BendaharaController extends Controller
         $pjk = pjk::select()
             ->where('id', '=', "{$id}")
             ->first();
-        return view('bendahara.detailpjk', ['pjk' => $pjk]);
+        return view('pjk.detailpjk', ['pjk' => $pjk]);
     }
     public function exportpjk(Request $request, $id)
     {
@@ -286,7 +364,7 @@ class BendaharaController extends Controller
         $pjk = pjk::select()
             ->where('id', '=', "{$id}")
             ->first();
-        return view('bendahara.editpjk', ['pjk' => $pjk]);
+        return view('pjk.editpjk', ['pjk' => $pjk]);
     }
     public function updatepjk(Request $request, $id)
     {
@@ -317,6 +395,7 @@ class BendaharaController extends Controller
         //kasbon
         $pjk->honorarium = $request->honorarium;
         $pjk->biayamodul = $request->biayamodul;
+        $pjk->user_id = auth()->user()->id;
         $pjk->save();
         return redirect()->route('bendaharaPjk');
     }

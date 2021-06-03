@@ -21,9 +21,10 @@
   <label>Jenis Transaksi</label>
   <div class="col-sm-12">
     <select style="width:100%;" class="form-control" id="jenistransaksi" name="jenistransaksi">
-        <option value="{{$transaksibendahara->jenistransaksi}}">{{$transaksibendahara->jenistransaksi}}</option>
-        <option value="kredit">Kredit</option>
-        <option value="debit">Debit</option>
+        <option value="{{$transaksibendahara->jenistransaksi_id}}">{{$transaksibendahara->jenistransaksi}}</option>
+        @foreach ($jenis as $row)
+          <option value="{{$row->id}}">{{$row->jenis}}</option>
+        @endforeach
     </select>
   </div>
 </div>
