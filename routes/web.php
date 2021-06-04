@@ -21,11 +21,6 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['middleware' => 'AdminMiddleware'], function () {
-        Route::get('/crud', 'AdminController@index')->name('crud');
-        Route::post('crud/simpan', 'AdminController@store')->name('simpan');
-        Route::delete('crud/delete/{id}', 'AdminController@destroy')->name('delete');
-        Route::get('crud/edit/{id}', 'AdminController@edit')->name('edit');
-        Route::PATCH('crud/update/{id}', 'AdminController@update')->name('edit');
     });
 
     Route::group(['middleware' => 'BendaharaMiddleware'], function () {
@@ -45,6 +40,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'KalabMiddleware'], function () {
         Route::get('kalab/verif/{id}', 'KalabController@verif')->name('verif');
         Route::get('kalab/unverif/{id}', 'KalabController@unverif')->name('unverif');
+        Route::get('/crud', 'AdminController@index')->name('crud');
+        Route::post('crud/simpan', 'AdminController@store')->name('simpan');
+        Route::delete('crud/delete/{id}', 'AdminController@destroy')->name('delete');
+        Route::get('crud/edit/{id}', 'AdminController@edit')->name('edit');
+        Route::PATCH('crud/update/{id}', 'AdminController@update')->name('edit');
     });
     Route::get('bendahara/home', 'BendaharaController@index')->name('bendaharaHome');
     Route::get('bendahara/dashboard', 'BendaharaController@dashboard')->name('bendaharaDashboard');

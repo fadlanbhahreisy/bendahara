@@ -1,6 +1,6 @@
 @extends('layouts.master')
-@section('title','Admin Page')
-@section('judul','Admin Page')
+@section('title','Ka Lab Page')
+@section('judul','Ka Lab Page')
 @section('section-header')
     <h1>Manajemen User</h1>
 @endsection

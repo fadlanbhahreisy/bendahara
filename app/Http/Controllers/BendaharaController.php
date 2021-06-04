@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use function GuzzleHttp\Promise\all;
 use App\pjk;
 use App\Jenistransaksi;
+use App\User;
 use Illuminate\Support\Facades\DB;
 
 class BendaharaController extends Controller
@@ -39,10 +40,13 @@ class BendaharaController extends Controller
         $counttransaksi = count($transaksibendahara);
         $pjk = pjk::get();
         $countpjk = count($pjk);
+        $user = User::get();
+        $countuser = count($user);
         return view('transaksi.dashboard', [
             'jumlahtransaksi' => $counttransaksi,
             'saldo' => $this->getSaldo(),
-            'jumlahpjk' => $countpjk
+            'jumlahpjk' => $countpjk,
+            'jumlahuser' => $countuser
         ]);
     }
     public function index()
@@ -84,6 +88,12 @@ class BendaharaController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        $request->validate([
+            'keterangan' => 'required',
+            'tanggal' => 'required',
+            'nominal' => 'required',
+            'jenistransaksi' => 'required'
+        ]);
         $transaksibendahara = new Transaksibendahara();
         if ($request->hasFile('files')) {
             $file = $request->file('files');
@@ -102,7 +112,7 @@ class BendaharaController extends Controller
         } else {
             echo "file belum ada";
         }
-        return redirect()->route('bendaharaHome');
+        return redirect()->route('bendaharaHome')->with('message', 'Data Berhasil Disimpan');
     }
 
     /**
@@ -153,6 +163,12 @@ class BendaharaController extends Controller
      */
     public function update(Request $request)
     {
+        $request->validate([
+            'keterangan' => 'required',
+            'tanggal' => 'required',
+            'nominal' => 'required',
+            'jenistransaksi' => 'required'
+        ]);
         // dd($request->all());
         $transaksibendahara = Transaksibendahara::find($request->id);
         $transaksibendahara->keterangan = $request->keterangan;
@@ -169,7 +185,7 @@ class BendaharaController extends Controller
             $transaksibendahara->gambar = $filename;
         }
         $transaksibendahara->save();
-        return redirect()->route('bendaharaHome');
+        return redirect()->route('bendaharaHome')->with('message', 'Data Berhasil Diupdate');
     }
 
     /**
@@ -243,6 +259,30 @@ class BendaharaController extends Controller
     public function insertpjk(Request $request)
     {
         //praktikum
+        $request->validate([
+            'judul' => 'required',
+            'tanggal' => 'required',
+            'lampiran' => 'required',
+            'praktikum' => 'required',
+            'periode' => 'required',
+            'lulus' => 'required',
+            'tidaklulus' => 'required',
+            'gugur' => 'required',
+            'jumlahpeserta' => 'required',
+            'kelas' => 'required',
+            'perkelas' => 'required',
+            'jumlahmodul' => 'required',
+            'lamapraktikum' => 'required',
+            'sks' => 'required',
+            'sertifikat' => 'required',
+            'operasional' => 'required',
+            'koordinator' => 'required',
+            'administrator' => 'required',
+            'kebersihan' => 'required',
+            'bimbingan' => 'required',
+            'honorarium' => 'required',
+            'biayamodul' => 'required',
+        ]);
         $pjk = new pjk();
         $pjk->judul = $request->judul;
         $pjk->tanggal = $request->tanggal;
@@ -272,7 +312,7 @@ class BendaharaController extends Controller
         $pjk->biayamodul = $request->biayamodul;
         $pjk->user_id = auth()->user()->id;
         $pjk->save();
-        return redirect()->route('bendaharaPjk');
+        return redirect()->route('bendaharaPjk')->with('message', 'Data PJK Berhasil Ditambahkan');
     }
     public function detailpjk($id)
     {
@@ -368,6 +408,30 @@ class BendaharaController extends Controller
     }
     public function updatepjk(Request $request, $id)
     {
+        $request->validate([
+            'judul' => 'required',
+            'tanggal' => 'required',
+            'lampiran' => 'required',
+            'praktikum' => 'required',
+            'periode' => 'required',
+            'lulus' => 'required',
+            'tidaklulus' => 'required',
+            'gugur' => 'required',
+            'jumlahpeserta' => 'required',
+            'kelas' => 'required',
+            'perkelas' => 'required',
+            'jumlahmodul' => 'required',
+            'lamapraktikum' => 'required',
+            'sks' => 'required',
+            'sertifikat' => 'required',
+            'operasional' => 'required',
+            'koordinator' => 'required',
+            'administrator' => 'required',
+            'kebersihan' => 'required',
+            'bimbingan' => 'required',
+            'honorarium' => 'required',
+            'biayamodul' => 'required',
+        ]);
         $pjk = pjk::find($id);
         $pjk->judul = $request->judul;
         $pjk->tanggal = $request->tanggal;
@@ -397,7 +461,7 @@ class BendaharaController extends Controller
         $pjk->biayamodul = $request->biayamodul;
         $pjk->user_id = auth()->user()->id;
         $pjk->save();
-        return redirect()->route('bendaharaPjk');
+        return redirect()->route('bendaharaPjk')->with('message', 'Berhasil Update PJK');
     }
     public function destroypjk($id)
     {

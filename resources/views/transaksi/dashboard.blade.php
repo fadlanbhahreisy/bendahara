@@ -44,13 +44,26 @@
     <div class="card bg-primary ml-5" style="width: 18rem;">
         <div class="card-body">
           <div class="card-body-icon">
-            <i class="fas fa-money-bill mr-3"></i>
+            <i class="fas fa-book mr-3"></i>
           </div>
           <h5 class="card-title">Total PJK</h5>
           <div class="display-4">{{$jumlahpjk}}</div>
           <a href="{{route('bendaharaPjk')}}"><p class="card-text text-white">detail<i class="fas fa-angle-double-right ml-2"></i></p></a>
         </div>
     </div>
+    @if (auth()->user()->role_id == '4')
+      <div class="card bg-secondary ml-5" style="width: 18rem;">
+        <div class="card-body">
+          <div class="card-body-icon">
+            <i class="fas fa-users mr-3"></i>
+          </div>
+          <h5 class="card-title">Total User</h5>
+          <div class="display-4">{{$jumlahuser}}</div>
+          <a href="{{route('crud')}}"><p class="card-text text-white">detail<i class="fas fa-angle-double-right ml-2"></i></p></a>
+        </div>
+      </div>
+    @endif
+    
 </div>
 
 @endsection
