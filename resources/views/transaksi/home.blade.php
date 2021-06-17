@@ -49,85 +49,86 @@
       @if (auth()->user()->role_id == '2')
         <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
       @endif
-      </div>
+  </div>
+  
 </div>
+
 <div class="mt-5">
-<form action="{{route('filterbendahara')}}" method="POST">
-  @csrf
-  <div class="container">
-    <div class="row">
-      <div class="container-fluid">
-        <div class="form-group row">
-          <label for="date" class="col-form-label col-sm-2">from</label>
-          <div class="col-sm-3">
-            <input type="date" class="form-control input-sm" id="from" name="from">
-          </div>
-          <label for="date" class="col-form-label col-sm-2">to</label>
-          <div class="col-sm-3">
-            <input type="date" class="form-control input-sm" id="to" name="to">
-          </div>
-          <div class="col-sm-2">
-            <button type="submit" class="btn btn-success" name="search">Filter</button>
+  <form action="{{route('filterbendahara')}}" method="POST">
+    @csrf
+    <div class="container">
+      <div class="row">
+        <div class="container-fluid">
+          <div class="form-group row">
+            <label for="date" class="col-form-label col-sm-2">from</label>
+            <div class="col-sm-3">
+              <input type="date" class="form-control input-sm" id="from" name="from">
+            </div>
+            <label for="date" class="col-form-label col-sm-2">to</label>
+            <div class="col-sm-3">
+              <input type="date" class="form-control input-sm" id="to" name="to">
+            </div>
+            <div class="col-sm-2">
+              <button type="submit" class="btn btn-success" name="search">Filter</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</form>
-  <table class="table table-striped display" id="tabel_bendahara">
-    <thead>
-      <tr>
-        <th>No</th>
-        <th>Keterangan</th>
-        <th>Tanggal</th>
-        <th>Nominal</th>
-        <th>Jenis Transaksi</th>
-        <th>Status</th>
-        <th>Bukti</th>
-        <th>Action</th>
-        
-
-      </tr>
-    </thead>
-      
-      <tbody>
-        @foreach ($datatransaksibendahara as $no => $data)
+  </form>
+    <table class="table table-striped display" id="tabel_bendahara">
+      <thead>
         <tr>
-          <td>{{$no+1}}</td>
-            <td>{{$data->keterangan}}</td>
-            <td>{{$data->tanggal}}</td>
-            <td>{{$data->nominal}}</td>
-            <td>{{$data->jenistransaksi}}</td>
-              <td>
-                <?= $data->status == 0 ? '<span class="badge badge-danger">Belum Di-Verif</span>' : '<span class="badge badge-success">Telah Di Verif</span>'; ?>
-              </td>
-            <td><img src="{{asset('uploads/'.$data->gambar)}}" alt="" width="200px"></td>
-            <td>
-              @if (auth()->user()->role_id == '2')
-                <a href="#" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>
-                <a href="#" data-id="{{$data->id}}" class="btn btn-danger swal-confirm" title="hapus"><i class="fa fa-trash "></i>
-                  <form action="{{route('deletebendahara',$data->id)}}" id="delete{{$data->id}}" method="post">
-                    @csrf
-                    @method('delete')
-                  </form>
-                </a>
-              @elseif(auth()->user()->role_id == '4')
-                <?php if ($data->status == 0) : ?>
-                    <a href="{{route('verif',$data->id)}}" class="btn btn-success">Verif</a>
-                <?php else : ?>
-                    <a href="{{route('unverif',$data->id)}}" class="btn btn-danger">Un-Verif</a>
-                <?php endif; ?>
-              @endif
-                <a href="{{route('detailbendahara',$data->id)}}" class="btn btn-primary" title="detail"><i class="fa fa-play"></i></a>
-            </td>
+          <th>No</th>
+          <th>Keterangan</th>
+          <th>Tanggal</th>
+          <th>Nominal</th>
+          <th>Jenis Transaksi</th>
+          <th>Status</th>
+          <th>Bukti</th>
+          <th>Action</th>
+          
+  
         </tr>
-        @endforeach
-      </tbody>
+      </thead>
         
-  </table>
-</div>
-</div>
-
+        <tbody>
+          @foreach ($datatransaksibendahara as $no => $data)
+          <tr>
+            <td>{{$no+1}}</td>
+              <td>{{$data->keterangan}}</td>
+              <td>{{$data->tanggal}}</td>
+              <td>{{$data->nominal}}</td>
+              <td>{{$data->jenistransaksi}}</td>
+                <td>
+                  <?= $data->status == 0 ? '<span class="badge badge-danger">Belum Di-Verif</span>' : '<span class="badge badge-success">Telah Di Verif</span>'; ?>
+                </td>
+              <td><img src="{{asset('uploads/'.$data->gambar)}}" alt="" width="200px"></td>
+              <td>
+                @if (auth()->user()->role_id == '2')
+                  <a href="#" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>
+                  <a href="#" data-id="{{$data->id}}" class="btn btn-danger swal-confirm" title="hapus"><i class="fa fa-trash "></i>
+                    <form action="{{route('deletebendahara',$data->id)}}" id="delete{{$data->id}}" method="post">
+                      @csrf
+                      @method('delete')
+                    </form>
+                  </a>
+                @elseif(auth()->user()->role_id == '4')
+                  <?php if ($data->status == 0) : ?>
+                      <a href="{{route('verif',$data->id)}}" class="btn btn-success">Verif</a>
+                  <?php else : ?>
+                      <a href="{{route('unverif',$data->id)}}" class="btn btn-danger">Un-Verif</a>
+                  <?php endif; ?>
+                @endif
+                  <a href="{{route('detailbendahara',$data->id)}}" class="btn btn-primary" title="detail"><i class="fa fa-play"></i></a>
+              </td>
+          </tr>
+          @endforeach
+        </tbody>
+          
+    </table>
+  </div>
+  </div>
 @endsection
 @section('modal')
 <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

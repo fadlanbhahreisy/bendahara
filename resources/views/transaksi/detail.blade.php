@@ -12,7 +12,7 @@
 @endsection
 
 @section('section-body')
-<table>
+<table class="table">
     <tr>
         <td class="text-left">Keterangan</td>
         <td class="text-center">:</td>

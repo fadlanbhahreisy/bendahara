@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\honor;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('bendahara/deletepjk/{id}', 'BendaharaController@destroypjk')->name('deletepjk');
         Route::get('bendahara/editpjk/{id}', 'BendaharaController@editpjk')->name('editpjk');
         Route::get('bendahara/updatepjk/{id}', 'BendaharaController@updatepjk')->name('updatepjk');
+        //honor
+        Route::post('bendahara/simpanhonor', 'BendaharaController@simpanhonor')->name('simpanhonor');
+        Route::get('bendahara/edithonor/{id}', 'BendaharaController@edithonor')->name('edithonor');
+        Route::post('bendahara/updatehonor', 'BendaharaController@updatehonor')->name('updatehonor');
+        Route::delete('bendahara/deletehonor/{id}', 'BendaharaController@deletehonor')->name('deletehonor');
     });
     Route::group(['middleware' => 'KalabMiddleware'], function () {
         Route::get('kalab/verif/{id}', 'KalabController@verif')->name('verif');
@@ -53,6 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('koordinator/reportpjk', 'BendaharaController@pjk')->name('reportpjk');
     Route::get('bendahara/detail/{id}', 'BendaharaController@detail')->name('detailbendahara');
     Route::get('bendahara/exportpjk/{id}', 'BendaharaController@exportpjk')->name('exportpjk');
+    Route::get('bendahara/honor', 'BendaharaController@honor')->name('honor');
 });
 
 Route::post('/login', 'autentikasi\AutentikasiController@login')->name('login');

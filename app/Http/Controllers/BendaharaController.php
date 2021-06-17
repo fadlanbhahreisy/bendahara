@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transaksibendahara;
 use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Carbon\Carbon;
@@ -12,6 +13,8 @@ use function GuzzleHttp\Promise\all;
 use App\pjk;
 use App\Jenistransaksi;
 use App\User;
+use App\honor;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class BendaharaController extends Controller
@@ -319,13 +322,17 @@ class BendaharaController extends Controller
         $pjk = pjk::select()
             ->where('id', '=', "{$id}")
             ->first();
-        return view('pjk.detailpjk', ['pjk' => $pjk]);
+        $honor = honor::select()
+            ->where('pjk_id', '=', "{$id}")->get();
+        return view('pjk.detailpjk', ['pjk' => $pjk, 'honor' => $honor]);
     }
     public function exportpjk(Request $request, $id)
     {
         $pjk = pjk::select()
             ->where('id', '=', "{$id}")
             ->first();
+        $honor = honor::select()
+            ->where('pjk_id', '=', "{$id}")->get();
         $tanggal = Carbon::parse($pjk->tanggal)->isoFormat('D MMMM Y');
         $tanggal2 = Carbon::parse($pjk->tanggal)->isoFormat('D/M/Y');
         $tahun = Carbon::parse($pjk->tanggal)->isoFormat('Y');
@@ -365,6 +372,41 @@ class BendaharaController extends Controller
             $templateProcessor->setValue('honorarium', number_format($pjk->honorarium));
             $templateProcessor->setValue('biayamodul', number_format($pjk->biayamodul));
             $templateProcessor->setValue('dana', number_format($dana));
+
+            $table = new Table(array('borderSize' => 12, 'borderColor' => 'black', 'width' => 10000,));
+            $table->addRow();
+            $table->addCell(150)->addText('NO');
+            $table->addCell(150)->addText('Nama');
+            $table->addCell(150)->addText('Status');
+            $table->addCell(150)->addText('SKS');
+            $table->addCell(150)->addText('Biaya Khusus');
+            $table->addCell(150)->addText('HDR');
+            $table->addCell(150)->addText('Jumlah bimb');
+            $table->addCell(150)->addText('Hr bimb');
+            $table->addCell(150)->addText('Total');
+            $table->addRow();
+            $table->addCell(150)->addText('1');
+            $table->addCell(150)->addText('2');
+            $table->addCell(150)->addText('3');
+            $table->addCell(150)->addText('4');
+            $table->addCell(150)->addText('5');
+            $table->addCell(150)->addText('6');
+            $table->addCell(150)->addText('7');
+            $table->addCell(150)->addText('8');
+            $table->addCell(150)->addText('9=4+5+8');
+            foreach ($honor as $no => $row) {
+                $table->addRow();
+                $table->addCell(150)->addText($no + 1);
+                $table->addCell(150)->addText($row->nama);
+                $table->addCell(150)->addText($row->status);
+                $table->addCell(150)->addText($row->sks);
+                $table->addCell(150)->addText($row->biayakhusus);
+                $table->addCell(150)->addText($row->hdr);
+                $table->addCell(150)->addText($row->jumlahbimb);
+                $table->addCell(150)->addText($row->hrbimb);
+                $table->addCell(150)->addText($row->total);
+            }
+            $templateProcessor->setComplexBlock('table', $table);
             $fileName = "DataPJK";
             $templateProcessor->saveAs($fileName . '.docx');
             return response()->download($fileName . '.docx')->deleteFileAfterSend(true);
@@ -390,6 +432,25 @@ class BendaharaController extends Controller
             $sheet->getSheetByName('rincian')->setCellValue('j8', $pjk->bimbingan);
             $sheet->getSheetByName('rincian')->setCellValue('j9', $pjk->sertifikat);
 
+            $x = 6;
+            foreach ($honor as $row) {
+                $sheet->getSheetByName('CEK HONORIUM')->setCellValue('c' . $x, $row->status);
+                $sheet->getSheetByName('CEK HONORIUM')->setCellValue('d' . $x, $row->honorpraktikum);
+                $x = $x + 1;
+            }
+            $y = 5;
+            foreach ($honor as $no => $row) {
+                $sheet->getSheetByName('Honorarium')->setCellValue('a' . $y, $no + 1);
+                $sheet->getSheetByName('Honorarium')->setCellValue('b' . $y, $row->nama);
+                $sheet->getSheetByName('Honorarium')->setCellValue('c' . $y, $row->status);
+                $sheet->getSheetByName('Honorarium')->setCellValue('d' . $y, $row->sks);
+                $sheet->getSheetByName('Honorarium')->setCellValue('e' . $y, $row->biayakhusus);
+                $sheet->getSheetByName('Honorarium')->setCellValue('f' . $y, $row->hdr);
+                $sheet->getSheetByName('Honorarium')->setCellValue('g' . $y, $row->jumlahbimb);
+                $sheet->getSheetByName('Honorarium')->setCellValue('h' . $y, $row->hrbimb);
+                $sheet->getSheetByName('Honorarium')->setCellValue('i' . $y, $row->total);
+                $y = $y + 1;
+            }
             //termin1+2
             $sheet->getSheetByName('Termin I+II')->setCellValue('e6', $pjk->sks);
             $sheet->getSheetByName('Termin I+II')->setCellValue('g6', $pjk->jumlahkelas);
@@ -467,5 +528,82 @@ class BendaharaController extends Controller
     {
         pjk::destroy($id);
         return redirect()->route('bendaharaPjk');
+    }
+    public function honor()
+    {
+        $pjk = pjk::get();
+        $honor = honor::select(
+            'honors.id',
+            'honors.nama',
+            'honors.status',
+            'honors.sks',
+            'honors.biayakhusus',
+            'honors.hdr',
+            'honors.jumlahbimb',
+            'honors.hrbimb',
+            'honors.total',
+            'honors.honorpraktikum',
+            'pjks.judul'
+        )->join('pjks', 'pjks.id', '=', 'honors.pjk_id')->get();
+        return view('pjk.honor', ['pjk' => $pjk, 'honor' => $honor]);
+    }
+    function simpanhonor(Request $request)
+    {
+        // dd($request->all());
+        $pjk = pjk::find($request->pjk);
+        $honor = new honor();
+        $honor->nama = $request->nama;
+        $honor->status = $request->status;
+        $honor->sks = $request->sks;
+        $honor->biayakhusus = $request->biayakhusus;
+        $honor->hdr = $request->hdr;
+        $honor->jumlahbimb = $request->jumlahbimb;
+        $honor->hrbimb = $request->hrbimb;
+        $honor->total = $request->total;
+        $pjk->honors()->save($honor);
+        return redirect()->route('honor')->with('message', 'Data Berhasil Disimpan');
+    }
+    function edithonor($id)
+    {
+        $pjk = pjk::get();
+        $honor = honor::select(
+            'honors.id',
+            'honors.nama',
+            'honors.status',
+            'honors.sks',
+            'honors.biayakhusus',
+            'honors.hdr',
+            'honors.jumlahbimb',
+            'honors.hrbimb',
+            'honors.total',
+            'honors.pjk_id',
+            'honors.honorpraktikum',
+            'pjks.judul'
+        )->join('pjks', 'pjks.id', '=', 'honors.pjk_id')
+            ->where('honors.id', '=', "{$id}")
+            ->first();
+
+        return view('pjk.edithonor', ['pjk' => $pjk, 'honor' => $honor]);
+    }
+    function updatehonor(Request $request)
+    {
+        $honor = honor::find($request->id);
+        $honor->nama = $request->nama;
+        $honor->status = $request->status;
+        $honor->sks = $request->sks;
+        $honor->biayakhusus = $request->biayakhusus;
+        $honor->hdr = $request->hdr;
+        $honor->jumlahbimb = $request->jumlahbimb;
+        $honor->hrbimb = $request->hrbimb;
+        $honor->total = $request->total;
+        $honor->pjk_id = $request->pjk;
+        $honor->honorpraktikum = $request->honorpraktikum;
+        $honor->save();
+        return redirect()->route('honor')->with('message', 'Data Berhasil Diupdate');
+    }
+    function deletehonor($id)
+    {
+        honor::destroy($id);
+        return redirect()->route('honor');
     }
 }

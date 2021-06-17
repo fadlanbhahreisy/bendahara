@@ -17,10 +17,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $user = DB::table('users')
-            ->select('users.id', 'users.email', 'users.name', 'roles.role')
+        $user = User::select('users.id', 'users.email', 'users.name', 'roles.role')
             ->join('roles', 'roles.id', '=', 'users.role_id')->get();
-        return view('admin.index', ['data_user' => $user]);
+        $role = role::get();
+        return view('admin.index', ['data_user' => $user, 'role' => $role]);
     }
 
     /**
@@ -78,11 +78,12 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        $user = User::select('users.id', 'users.email', 'users.name', 'roles.role')
+        $user = User::select('users.id', 'users.email', 'users.role_id', 'users.name', 'roles.role')
             ->join('roles', 'roles.id', '=', 'users.role_id')
             ->where('users.id', '=', "{$id}")
             ->first();
-        return view('admin.editmodal', ['pilih_user' => $user]);
+        $role = role::get();
+        return view('admin.editmodal', ['pilih_user' => $user, 'role' => $role]);
     }
 
     /**

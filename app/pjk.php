@@ -10,4 +10,8 @@ class pjk extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function honors()
+    {
+        return $this->hasMany(honor::class);
+    }
 }

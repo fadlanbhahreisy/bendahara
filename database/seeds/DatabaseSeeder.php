@@ -7,6 +7,7 @@ use App\role;
 use App\Jenistransaksi;
 use App\Transaksibendahara;
 use App\pjk;
+use App\honor;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -110,5 +111,187 @@ class DatabaseSeeder extends Seeder
         $pjk->honorarium = 3120500;
         $pjk->biayamodul = 2447500;
         $user->pjks()->save($pjk);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Muhammad Kurniawan, S.Kom., M.Kom.";
+        $honor->status = "Koordinator";
+        $honor->sks = null;
+        $honor->biayakhusus = 70000;
+        $honor->hdr = null;
+        $honor->jumlahbimb = null;
+        $honor->hrbimb = 0;
+        $honor->total = 70000;
+        $honor->honorpraktikum = 70000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Muhammad Kurniawan, S.Kom., M.Kom.";
+        $honor->status = "Dosen/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Nanang Fakhrur Rozi, S.ST.";
+        $honor->status = "Dosen/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Farida, S.Kom., M.Kom.";
+        $honor->status = "Dosen/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Khisby Al Ghofari";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Michael Araona Wily";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Achmad Fadlan Bhahreisy";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Eric Wahyu Amiruddin";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Fernanda Putra Aditya";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Odila Windy Astuti Halimaking";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Fitria Risqina";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Sita Fara Yunanda";
+        $honor->status = "Asisten/Pemb.";
+        $honor->sks = 2500;
+        $honor->biayakhusus = null;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = 268000;
+        $honor->total = 270500;
+        $honor->honorpraktikum = 400000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Sita Fara Yunanda";
+        $honor->status = "Adm+Juru Lab.";
+        $honor->sks = null;
+        $honor->biayakhusus = 50000;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = null;
+        $honor->total = 50000;
+        $honor->honorpraktikum = 80000;
+        $pjk->honors()->save($honor);
+
+        $pjk = pjk::find(1);
+        $honor = new honor();
+        $honor->nama = "Odila Windy Astuti Halimaking";
+        $honor->status = "Kebersihan";
+        $honor->sks = null;
+        $honor->biayakhusus = 25000;
+        $honor->hdr = 24;
+        $honor->jumlahbimb = 8;
+        $honor->hrbimb = null;
+        $honor->total = 25000;
+        $honor->honorpraktikum = 25000;
+        $pjk->honors()->save($honor);
     }
 }

@@ -1,4 +1,3 @@
-
   <div class="form-group">
       <input type="hidden" value="{{$transaksibendahara->id}}" name="id" id="id_transaksi" class="form-control" >
     </div>
@@ -21,9 +20,9 @@
   <label>Jenis Transaksi</label>
   <div class="col-sm-12">
     <select style="width:100%;" class="form-control" id="jenistransaksi" name="jenistransaksi">
-        <option value="{{$transaksibendahara->jenistransaksi_id}}">{{$transaksibendahara->jenistransaksi}}</option>
+        {{-- <option value="{{$transaksibendahara->jenistransaksi_id}}">{{$transaksibendahara->jenistransaksi}}</option> --}}
         @foreach ($jenis as $row)
-          <option value="{{$row->id}}">{{$row->jenis}}</option>
+          <option value="{{$row->id}}" {{ $row->id == $transaksibendahara->jenistransaksi_id ? 'selected' : ""}}>{{$row->jenis}}</option>
         @endforeach
     </select>
   </div>

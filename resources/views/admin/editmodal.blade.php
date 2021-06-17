@@ -20,10 +20,8 @@
     <label>role</label>
     <div class="col-sm-12">
       <select style="width:100%;" class="form-control" id="role" name="role">
-          <option value="1">{{$pilih_user->role}}</option>
-          <option value="1">Admin</option>
-          <option value="2">Bendahara</option>
-          <option value="3">Koordinator</option>
-          <option value="4">Ka Lab</option>
+        @foreach ($role as $row)
+        <option value="{{$row->id}}" {{ $row->id == $pilih_user->role_id ? 'selected' : ""}}>{{$row->role}}</option>
+      @endforeach
       </select>
   </div>
