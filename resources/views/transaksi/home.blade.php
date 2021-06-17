@@ -1,18 +1,18 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@if (auth()->user()->role_id == '2')
+@if (auth()->user()->role_id == '1')
   @section('judul','Bendahara Page')
 
   @section('section-header')
       <h1>bendahara</h1>
   @endsection
-@elseif(auth()->user()->role_id == '3')
+@elseif(auth()->user()->role_id == '2')
   @section('judul','Koordinator Page')
 
   @section('section-header')
       <h1>Koordinator</h1>
   @endsection
-@elseif(auth()->user()->role_id == '4')
+@elseif(auth()->user()->role_id == '3')
   @section('judul','Ka Lab Page')
 
   @section('section-header')
@@ -46,7 +46,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-2">
-      @if (auth()->user()->role_id == '2')
+      @if (auth()->user()->role_id == '1')
         <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
       @endif
   </div>
@@ -105,7 +105,7 @@
                 </td>
               <td><img src="{{asset('uploads/'.$data->gambar)}}" alt="" width="200px"></td>
               <td>
-                @if (auth()->user()->role_id == '2')
+                @if (auth()->user()->role_id == '1')
                   <a href="#" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>
                   <a href="#" data-id="{{$data->id}}" class="btn btn-danger swal-confirm" title="hapus"><i class="fa fa-trash "></i>
                     <form action="{{route('deletebendahara',$data->id)}}" id="delete{{$data->id}}" method="post">
@@ -113,7 +113,7 @@
                       @method('delete')
                     </form>
                   </a>
-                @elseif(auth()->user()->role_id == '4')
+                @elseif(auth()->user()->role_id == '3')
                   <?php if ($data->status == 0) : ?>
                       <a href="{{route('verif',$data->id)}}" class="btn btn-success">Verif</a>
                   <?php else : ?>

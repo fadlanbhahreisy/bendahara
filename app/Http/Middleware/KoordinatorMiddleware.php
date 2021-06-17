@@ -15,7 +15,7 @@ class KoordinatorMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->role_id == '3') {
+        if (auth()->user()->role_id == '2') {
             return $next($request);
         }
         return redirect('/')->with('error', "You don't have admin access.");

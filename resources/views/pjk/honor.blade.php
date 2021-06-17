@@ -1,10 +1,10 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@if (auth()->user()->role_id == '2')
+@if (auth()->user()->role_id == '1')
   @section('judul','Bendahara Page')
-@elseif(auth()->user()->role_id == '3')
+@elseif(auth()->user()->role_id == '2')
   @section('judul','Koordinator Page')
-@elseif(auth()->user()->role_id == '4')
+@elseif(auth()->user()->role_id == '3')
   @section('judul','Ka Lab Page')
 @endif
 
@@ -12,10 +12,32 @@
     <h1>Honor</h1>
 @endsection
 @section('section-body')
+@if (session('message'))
+<div class="alert alert-success alert-dismissible show fade">
+  <div class="alert-body">
+    <button class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+    {{session('message')}}
+  </div>
+</div>
+@endif
+@if ($errors->any())
+<div class="alert alert-danger alert-dismissible show fade">
+  <div class="alert-body">
+    <button class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+        @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+  </div>
+</div>
+@endif
 <div class="container">
   <div class="row">
     <div class="col-md-2">
-      @if (auth()->user()->role_id == '2')
+      @if (auth()->user()->role_id == '1')
         <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
       @endif
   </div>
@@ -55,7 +77,7 @@
               <td>{{$data->total}}</td>
               <td>{{$data->honorpraktikum}}</td>
               <td>
-                @if (auth()->user()->role_id == '2')
+                @if (auth()->user()->role_id == '1')
                   <a href="#" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>
                   <a href="#" data-id="{{$data->id}}" class="btn btn-danger swal-confirm" title="hapus"><i class="fa fa-trash "></i>
                     <form action="{{route('deletehonor',$data->id)}}" id="delete{{$data->id}}" method="post">

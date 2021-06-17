@@ -549,6 +549,12 @@ class BendaharaController extends Controller
     }
     function simpanhonor(Request $request)
     {
+        $request->validate([
+            'nama' => 'required',
+            'status' => 'required',
+            'total' => 'required',
+            'honorpraktikum' => 'required'
+        ]);
         // dd($request->all());
         $pjk = pjk::find($request->pjk);
         $honor = new honor();
@@ -587,6 +593,12 @@ class BendaharaController extends Controller
     }
     function updatehonor(Request $request)
     {
+        $request->validate([
+            'nama' => 'required',
+            'status' => 'required',
+            'total' => 'required',
+            'honor' => 'required'
+        ]);
         $honor = honor::find($request->id);
         $honor->nama = $request->nama;
         $honor->status = $request->status;

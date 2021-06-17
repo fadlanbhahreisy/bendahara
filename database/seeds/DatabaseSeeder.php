@@ -19,9 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $role = new role();
-        $role->role = "admin";
-        $role->save();
+
 
         $role = new role();
         $role->role = "bendahara";
@@ -35,28 +33,23 @@ class DatabaseSeeder extends Seeder
         $role->role = "kalab";
         $role->save();
 
-        $roles = role::find(1);
-        $user = new User;
-        $user->name = "admin";
-        $user->email = "admin@gmail.com";
-        $user->password = Hash::make("admin");
-        $roles->users()->save($user);
 
-        $roles = role::find(2);
+
+        $roles = role::find(1);
         $user = new User;
         $user->name = "bendahara";
         $user->email = "bendahara@gmail.com";
         $user->password = Hash::make("bendahara");
         $roles->users()->save($user);
 
-        $roles = role::find(3);
+        $roles = role::find(2);
         $user = new User;
         $user->name = "koor";
         $user->email = "koor@gmail.com";
         $user->password = Hash::make("koor");
         $roles->users()->save($user);
 
-        $roles = role::find(4);
+        $roles = role::find(3);
         $user = new User;
         $user->name = "kalab";
         $user->email = "kalab@gmail.com";
@@ -82,7 +75,7 @@ class DatabaseSeeder extends Seeder
         $transaksibendahara->user_id = 2;
         $transaksibendahara->save();
 
-        $user = User::find(2);
+        $user = User::find(1);
         $pjk = new pjk();
         $pjk->judul = "Praktikum PBO 2021";
         $pjk->tanggal = "2021-06-02";

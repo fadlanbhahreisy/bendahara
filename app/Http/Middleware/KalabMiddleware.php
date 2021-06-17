@@ -15,7 +15,7 @@ class KalabMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->role_id == '4') {
+        if (auth()->user()->role_id == '3') {
             return $next($request);
         }
         return redirect('/')->with('error', "You don't have admin access.");

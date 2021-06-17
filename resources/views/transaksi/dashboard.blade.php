@@ -1,18 +1,18 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@if (auth()->user()->role_id == '2')
+@if (auth()->user()->role_id == '1')
   @section('judul','Bendahara Page')
 
   @section('section-header')
       <h1>bendahara</h1>
   @endsection
-@elseif(auth()->user()->role_id == '3')
+@elseif(auth()->user()->role_id == '2')
   @section('judul','Koordinator Page')
 
   @section('section-header')
       <h1>Koordinator</h1>
   @endsection
-@elseif(auth()->user()->role_id == '4')
+@elseif(auth()->user()->role_id == '3')
   @section('judul','Ka Lab Page')
 
   @section('section-header')
@@ -51,7 +51,7 @@
           <a href="{{route('bendaharaPjk')}}"><p class="card-text text-white">detail<i class="fas fa-angle-double-right ml-2"></i></p></a>
         </div>
     </div>
-    @if (auth()->user()->role_id == '4')
+    @if (auth()->user()->role_id == '3')
       <div class="card bg-secondary ml-5" style="width: 18rem;">
         <div class="card-body">
           <div class="card-body-icon">

@@ -1,10 +1,10 @@
 @extends('layouts.master')
 @section('title','Bendahara Page')
-@if (auth()->user()->role_id == '2')
+@if (auth()->user()->role_id == '1')
   @section('judul','Bendahara Page')
-@elseif(auth()->user()->role_id == '3')
+@elseif(auth()->user()->role_id == '2')
   @section('judul','Koordinator Page')
-@elseif(auth()->user()->role_id == '4')
+@elseif(auth()->user()->role_id == '3')
   @section('judul','Ka Lab Page')
 @endif
 @section('section-header')
