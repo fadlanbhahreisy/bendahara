@@ -28,10 +28,10 @@ class BendaharaController extends Controller
     {
         $transaksibendahara = Transaksibendahara::get();
         $kredit = Transaksibendahara::select()
-            ->where('jenistransaksi_id', '=', "1")
+            ->where(['jenistransaksi_id' => '1', 'status' => TRUE])
             ->sum('nominal');
         $debit = Transaksibendahara::select()
-            ->where('jenistransaksi_id', '=', "2")
+            ->where(['jenistransaksi_id' => '2', 'status' => TRUE])
             ->sum('nominal');
         $saldo = $debit - $kredit;
         return $saldo;
@@ -39,7 +39,9 @@ class BendaharaController extends Controller
 
     public function dashboard()
     {
-        $transaksibendahara = Transaksibendahara::get();
+        $transaksibendahara = Transaksibendahara::select()
+            ->where(['status' => TRUE])
+            ->get();
         $counttransaksi = count($transaksibendahara);
         $pjk = pjk::get();
         $countpjk = count($pjk);
@@ -566,6 +568,7 @@ class BendaharaController extends Controller
         $honor->jumlahbimb = $request->jumlahbimb;
         $honor->hrbimb = $request->hrbimb;
         $honor->total = $request->total;
+        $honor->honorpraktikum = $request->honorpraktikum;
         $pjk->honors()->save($honor);
         return redirect()->route('honor')->with('message', 'Data Berhasil Disimpan');
     }

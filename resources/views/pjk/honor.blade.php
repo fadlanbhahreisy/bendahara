@@ -28,37 +28,38 @@
     <button class="close" data-dismiss="alert">
       <span>&times;</span>
     </button>
-        @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
-        @endforeach
+             @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
   </div>
 </div>
 @endif
 <div class="container">
+  @if (auth()->user()->role_id == '1')
   <div class="row">
     <div class="col-md-2">
-      @if (auth()->user()->role_id == '1')
-        <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
-      @endif
+      <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
+    </div>
   </div>
-  <div class="mt-5">
+  @endif
+<div class="mt-5">
+  <div class="table-responsive">
     <table class="table table-striped display" id="tabel_honor">
       <thead>
         <tr>
           <th>No</th>
-          <th>pjk</th>
-          <th>Nama</th>
-          <th>Status</th>
-          <th>SKS</th>
-          <th>Biaya Khusus</th>
-          <th>HDR</th>
-          <th>Jumlah Bimbingan</th>
-          <th>Hr Bimbingan</th>
-          <th>Total</th>
-          <th>Honor Praktikum</th>
-          <th>Action</th>
-    
-    
+              <th>pjk</th>
+              <th>Nama</th>
+              <th>Status</th>
+              <th>SKS</th>
+              <th>Biaya Khusus</th>
+              <th>HDR</th>
+              <th>Jumlah Bimbingan</th>
+              <th>Hr Bimbingan</th>
+              <th>Total</th>
+              <th>Honor Praktikum</th>
+              <th>Action</th>
+  
         </tr>
       </thead>
         
@@ -93,8 +94,9 @@
           
     </table>
   </div>
+  
 </div>
-
+</div>
 
 @endsection
 @section('modal')

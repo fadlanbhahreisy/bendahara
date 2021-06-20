@@ -49,9 +49,8 @@
       @if (auth()->user()->role_id == '1')
         <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
       @endif
+    </div>
   </div>
-  
-</div>
 
 <div class="mt-5">
   <form action="{{route('filterbendahara')}}" method="POST">
@@ -76,6 +75,8 @@
       </div>
     </div>
   </form>
+ 
+   <div class="table-responsive">
     <table class="table table-striped display" id="tabel_bendahara">
       <thead>
         <tr>
@@ -87,8 +88,6 @@
           <th>Status</th>
           <th>Bukti</th>
           <th>Action</th>
-          
-  
         </tr>
       </thead>
         
@@ -113,12 +112,6 @@
                       @method('delete')
                     </form>
                   </a>
-                @elseif(auth()->user()->role_id == '3')
-                  <?php if ($data->status == 0) : ?>
-                      <a href="{{route('verif',$data->id)}}" class="btn btn-success">Verif</a>
-                  <?php else : ?>
-                      <a href="{{route('unverif',$data->id)}}" class="btn btn-danger">Un-Verif</a>
-                  <?php endif; ?>
                 @endif
                   <a href="{{route('detailbendahara',$data->id)}}" class="btn btn-primary" title="detail"><i class="fa fa-play"></i></a>
               </td>
@@ -127,6 +120,8 @@
         </tbody>
           
     </table>
+   </div>
+    
   </div>
   </div>
 @endsection

@@ -35,9 +35,11 @@ class KalabController extends Controller
             'transaksibendaharas.gambar',
             'jenistransaksis.jenis as jenistransaksi'
         )
-            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')->get();
+            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')
+            ->where('transaksibendaharas.id', '=', "{$id}")
+            ->first();
         $jenistransaksi = Jenistransaksi::get();
-        return view('transaksi.home', [
+        return view('transaksi.detail', [
             'datatransaksibendahara' => $transaksi,
             'saldo' => $this->getSaldo(),
             'jenis' => $jenistransaksi
@@ -58,9 +60,11 @@ class KalabController extends Controller
             'transaksibendaharas.gambar',
             'jenistransaksis.jenis as jenistransaksi'
         )
-            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')->get();
+            ->join('jenistransaksis', 'jenistransaksis.id', '=', 'transaksibendaharas.jenistransaksi_id')
+            ->where('transaksibendaharas.id', '=', "{$id}")
+            ->first();
         $jenistransaksi = Jenistransaksi::get();
-        return view('transaksi.home', [
+        return view('transaksi.detail', [
             'datatransaksibendahara' => $transaksi,
             'saldo' => $this->getSaldo(),
             'jenis' => $jenistransaksi

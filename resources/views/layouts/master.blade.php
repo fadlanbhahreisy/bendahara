@@ -37,7 +37,11 @@
           </div>
 
           <div class="section-body">
-              @yield('section-body')
+            <div class="card">
+              <div class="card-body">
+                @yield('section-body')
+              </div> 
+            </div>  
           </div>
         </section>
         @yield('modal')

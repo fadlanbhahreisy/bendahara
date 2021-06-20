@@ -123,36 +123,39 @@
     </tr>
 </table>
 <h1>Honor</h1>
-<table class="table">
-    <thead>
-        <th>No</th>
-          <th>Nama</th>
-          <th>Status</th>
-          <th>SKS</th>
-          <th>Biaya Khusus</th>
-          <th>HDR</th>
-          <th>Jumlah Bimbingan</th>
-          <th>Hr Bimbingan</th>
-          <th>Total</th>
-          <th>Honor Praktikum</th>
-    </thead>
-    <tbody>
-        @foreach ($honor as $no => $data)
-        <tr>
-          <td>{{$no+1}}</td>
-            <td>{{$data->nama}}</td>
-            <td>{{$data->status}}</td>
-            <td>{{$data->sks}}</td>
-            <td>{{$data->biayakhusus}}</td>
-            <td>{{$data->hdr}}</td>
-            <td>{{$data->jumlahbimb}}</td>
-            <td>{{$data->hrbimb}}</td>
-            <td>{{$data->total}}</td>
-            <td>{{$data->honorpraktikum}}</td>
-        </tr>
-        @endforeach
-      </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>No</th>
+              <th>Nama</th>
+              <th>Status</th>
+              <th>SKS</th>
+              <th>Biaya Khusus</th>
+              <th>HDR</th>
+              <th>Jumlah Bimbingan</th>
+              <th>Hr Bimbingan</th>
+              <th>Total</th>
+              <th>Honor Praktikum</th>
+        </thead>
+        <tbody>
+            @foreach ($honor as $no => $data)
+            <tr>
+              <td>{{$no+1}}</td>
+                <td>{{$data->nama}}</td>
+                <td>{{$data->status}}</td>
+                <td>{{$data->sks}}</td>
+                <td>{{$data->biayakhusus}}</td>
+                <td>{{$data->hdr}}</td>
+                <td>{{$data->jumlahbimb}}</td>
+                <td>{{$data->hrbimb}}</td>
+                <td>{{$data->total}}</td>
+                <td>{{$data->honorpraktikum}}</td>
+            </tr>
+            @endforeach
+          </tbody>
+    </table>
+</div>
+
 <form action="{{route('exportpjk',$pjk->id)}}">
     <button type="submit" name="action" class="btn btn-primary" value="cetakDoc"><i class="fas fa-file-word"></i> cetak Doc</button>
     <button type="submit" name="action" class="btn btn-primary" value="cetakExcel"><i class="fas fa-file-excel"></i> cetak Excel</button>

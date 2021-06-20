@@ -40,5 +40,23 @@
             <img src="{{asset('uploads/'.$datatransaksibendahara->gambar)}}" alt="Foto Profile" width="400px" height="auto">
         </td>
     </tr>
+    @if(auth()->user()->role_id == '3')
+    <tr>
+        <td class="text-left"></td>
+        <td class="text-center"></td>
+        <td class="text-left">
+            <?php if ($datatransaksibendahara->status == 0) : ?>
+                <span class="text-primary h3 font-weight-bold">Belum diverifikasi</span>
+                <br />
+                <a href="{{route('verif',$datatransaksibendahara->id)}}" class="btn btn-success">Verif</a>
+            <?php else : ?>
+                <span class="text-primary h3 font-weight-bold">Sudah diverifikasi</span>
+                <br />
+                <a href="{{route('unverif',$datatransaksibendahara->id)}}" class="btn btn-danger">Un-Verif</a>
+            <?php endif; ?>
+        </td>
+    </tr>
+    @endif
 </table>
+
 @endsection

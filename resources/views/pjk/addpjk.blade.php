@@ -3,7 +3,7 @@
 @section('judul','Bendahara Page')
 
 @section('section-header')
-    <h1>bendahara</h1>
+    <h1>PJK</h1>
 @endsection
 @section('section-body')
 <form action="{{route('insertpjk')}}" method="POST">
@@ -26,7 +26,7 @@
       <input type="date" class="form-control" name="tanggal">
     </div>
   </div>
-  <h1>Praktikum</h1>
+  <h3>Praktikum</h3>
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Lampiran</label>
       <div class="col-sm-10">
@@ -130,7 +130,7 @@
         <input type="text" class="form-control" name="lamapraktikum">
       </div>
     </div>
-    <h1>Biaya Praktikum</h1>
+    <h3>Biaya Praktikum</h3>
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">SKS</label>
       <div class="col-sm-10">
@@ -194,7 +194,7 @@
         <input type="text" class="form-control" name="bimbingan">
       </div>
     </div>
-    <h1>Kasbon</h1>
+    <h3>Kasbon</h3>
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Honorarium</label>
       <div class="col-sm-10">
