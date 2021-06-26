@@ -16,7 +16,7 @@ class CreateTransaksibendaharasTable extends Migration
         Schema::create('transaksibendaharas', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal');
-            $table->string('keterangan');
+            $table->string('keterangan', 100);
             $table->double('nominal');
             $table->string('gambar')->nullable();
             $table->boolean('status');

@@ -33,7 +33,7 @@
           <a href="{{route('bendaharaDashboard')}}" onMouseOver="this.style.background='#F2F4F4'" onMouseOut="this.style.background='#FFF'" class="nav-link text-dark"><i class="fas fa-columns"></i> <span>Dashboard</span></a></a><hr class="bg-secondary">
         </li>
         <li class="active">
-          <a href="{{route('bendaharaHome')}}" onMouseOver="this.style.background='#F2F4F4'" onMouseOut="this.style.background='#FFF'" class="nav-link text-dark"><i class="fas fa-dollar-sign"></i> <span>Bendahara</span></a></a><hr class="bg-secondary">
+          <a href="{{route('bendaharaHome')}}" onMouseOver="this.style.background='#F2F4F4'" onMouseOut="this.style.background='#FFF'" class="nav-link text-dark"><i class="fas fa-dollar-sign"></i> <span>Report Bendahara</span></a></a><hr class="bg-secondary">
         </li>
         <li class="active">
           <a href="{{route('reportpjk')}}" onMouseOver="this.style.background='#F2F4F4'" onMouseOut="this.style.background='#FFF'" class="nav-link text-dark"><i class="fas fa-book"></i> <span>Report PJK</span></a></a><hr class="bg-secondary">

@@ -15,11 +15,11 @@ class CreatePjksTable extends Migration
     {
         Schema::create('pjks', function (Blueprint $table) {
             $table->id();
-            $table->String('judul');
+            $table->String('judul', 50);
             $table->date('tanggal');
             $table->integer('lampiran');
-            $table->String('praktikum');
-            $table->string('periode');
+            $table->String('praktikum', 50);
+            $table->string('periode', 10);
             $table->integer('lulus');
             $table->integer('tidaklulus');
             $table->integer('gugur');

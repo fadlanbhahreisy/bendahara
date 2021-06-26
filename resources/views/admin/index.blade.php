@@ -10,36 +10,40 @@
             <a href="" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#addmodal"><i class="fa fa-plus"></i>Add</a>
            
           </div>
-       
-          <table class="table table-striped">
-            <tr>
-              <th>No</th>
-              <th>email</th>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Action</th>
-
-            </tr>
-            
-              @foreach ($data_user as $no => $user)
-              <tr>
-                <td>{{$no+1}}</td>
-                  <td>{{$user->email}}</td>
-                  <td>{{$user->name}}</td>
-                  <td>{{$user->role}}</td>
-                  <td>
-                    <a href="#" data-id="{{$user->id}}" class="btn btn-primary btn-edit"><i class="fa fa-edit"></i>edit</a>
-                    <a href="#" data-id="{{$user->id}}" class="btn btn-danger swal-confirm"><i class="fa fa-trash "></i>delete
-                      <form action="{{route('delete',$user->id)}}" id="delete{{$user->id}}" method="post">
-                        @csrf
-                        @method('delete')
-                      </form>
-                    </a>
-                  </td>
-              </tr>
-              
-              @endforeach
-        </table>
+          <div class="table-responsive mt-5">
+            <table class="table table-striped" id="tabel_user">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>email</th>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($data_user as $no => $user)
+                <tr>
+                  <td>{{$no+1}}</td>
+                    <td>{{$user->email}}</td>
+                    <td>{{$user->name}}</td>
+                    <td>{{$user->role}}</td>
+                    <td>
+                      <a href="#" data-id="{{$user->id}}" class="btn btn-primary btn-edit"><i class="fa fa-edit"></i></a>
+                      <a href="#" data-id="{{$user->id}}" class="btn btn-danger swal-confirm"><i class="fa fa-trash "></i>
+                        <form action="{{route('delete',$user->id)}}" id="delete{{$user->id}}" method="post">
+                          @csrf
+                          @method('delete')
+                        </form>
+                      </a>
+                    </td>
+                </tr>
+                
+                @endforeach
+              </tbody>
+          </table>
+          </div>
+          
     </div>
 @endsection
 @section('modal')
@@ -177,6 +181,9 @@ $(".btn-update").on('click',function(){
     }
   })
 });
+$(document).ready( function () {
+    $('#tabel_user').DataTable();
+  } );
 </script>
 
 @endpush

@@ -10,13 +10,13 @@
   @section('judul','Koordinator Page')
 
   @section('section-header')
-      <h1>Koordinator</h1>
+      <h1>Report Trasnsaksi Bendahara</h1>
   @endsection
 @elseif(auth()->user()->role_id == '3')
   @section('judul','Ka Lab Page')
 
   @section('section-header')
-      <h1>Ka Lab</h1>
+      <h1>Report Trasnsaksi Bendahara</h1>
   @endsection
 @endif
 
@@ -37,9 +37,9 @@
     <button class="close" data-dismiss="alert">
       <span>&times;</span>
     </button>
-             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
   </div>
 </div>
 @endif
@@ -86,7 +86,6 @@
           <th>Nominal</th>
           <th>Jenis Transaksi</th>
           <th>Status</th>
-          <th>Bukti</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -102,7 +101,6 @@
                 <td>
                   <?= $data->status == 0 ? '<span class="badge badge-danger">Belum Di-Verif</span>' : '<span class="badge badge-success">Telah Di Verif</span>'; ?>
                 </td>
-              <td><img src="{{asset('uploads/'.$data->gambar)}}" alt="" width="200px"></td>
               <td>
                 @if (auth()->user()->role_id == '1')
                   <a href="#" data-id="{{$data->id}}" class="btn btn-primary btn-edit" title="edit"><i class="fa fa-edit"></i></a>

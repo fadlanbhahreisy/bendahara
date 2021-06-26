@@ -201,7 +201,16 @@ class BendaharaController extends Controller
      */
     public function destroy($id)
     {
-        Transaksibendahara::destroy($id);
+        // Transaksibendahara::destroy($id);
+        // return redirect()->route('bendaharaHome');
+
+        $transaksi = Transaksibendahara::find($id);
+
+        $image_path = public_path('uploads/' . $transaksi->gambar);
+        if (file_exists($image_path)) {
+            unlink($image_path);
+        }
+        $transaksi->delete();
         return redirect()->route('bendaharaHome');
     }
 

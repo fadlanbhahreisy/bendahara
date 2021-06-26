@@ -2,15 +2,22 @@
 @section('title','Bendahara Page')
 @if (auth()->user()->role_id == '1')
   @section('judul','Bendahara Page')
+  @section('section-header')
+    <h1>PJK</h1>
+@endsection
 @elseif(auth()->user()->role_id == '2')
   @section('judul','Koordinator Page')
+  @section('section-header')
+    <h1>Report PJK</h1>
+@endsection
 @elseif(auth()->user()->role_id == '3')
+@section('section-header')
+    <h1>Report PJK</h1>
+@endsection
   @section('judul','Ka Lab Page')
 @endif
 
-@section('section-header')
-    <h1>PJK</h1>
-@endsection
+
 @section('section-body')
 @if (session('message'))
 <div class="alert alert-success alert-dismissible show fade">

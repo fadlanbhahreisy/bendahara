@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\honor;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,7 +16,14 @@ use App\honor;
 |
 */
 
+Route::get('clear-all', function () {
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('route:clear');
+    $exitCode = Artisan::call('view:clear');
+    $exitCode = Artisan::call('config:cache');
 
+    return '<h1>Cache Clear</h1>';
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', function () {
